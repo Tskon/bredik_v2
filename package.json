@@ -1,0 +1,17 @@
+{
+  "name": "bredik_v2",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "nuxt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tskon/bredik_v2.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tskon/bredik_v2/issues"
+  },
+  "homepage": "https://github.com/Tskon/bredik_v2#readme"
+}
