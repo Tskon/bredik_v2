@@ -5,9 +5,9 @@
         TsKon
       </logo>
       <nav>
-        <a href="/">Главная</a>
-        <a href="#">Блог</a>
-        <a href="#">Обо мне</a>
+        <router-link to="/">Главная</router-link>
+        <router-link to="/articles">Блог</router-link>
+        <router-link to="/about-me">Обо мне</router-link>
       </nav>
     </header>
     <main>
