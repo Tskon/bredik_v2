@@ -13,5 +13,8 @@
   "bugs": {
     "url": "https://github.com/Tskon/bredik_v2/issues"
   },
-  "homepage": "https://github.com/Tskon/bredik_v2#readme"
+  "homepage": "https://github.com/Tskon/bredik_v2#readme",
+  "dependencies": {
+    "nuxt": "^2.3.4"
+  }
 }
