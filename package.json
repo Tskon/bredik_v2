@@ -16,5 +16,10 @@
   "homepage": "https://github.com/Tskon/bredik_v2#readme",
   "dependencies": {
     "nuxt": "^2.3.4"
+  },
+  "devDependencies": {
+    "node-sass": "^4.11.0",
+    "nuxt-sass-resources-loader": "^2.0.5",
+    "sass-loader": "^7.1.0"
   }
 }
