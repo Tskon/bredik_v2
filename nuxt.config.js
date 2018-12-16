@@ -9,7 +9,6 @@ module.exports = {
     ],
     htmlAttrs: {
       lang: 'ru',
-      amp: undefined // "amp" has no value
     }
   },
   modules: [
