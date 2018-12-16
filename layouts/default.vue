@@ -16,7 +16,11 @@
 
 <script>
   export default {
-    name: "default"
+    head: {
+      bodyAttrs: {
+        class: 'body-default'
+      }
+    }
   }
 </script>
 
