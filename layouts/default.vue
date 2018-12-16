@@ -10,9 +10,7 @@
         <router-link to="/about-me">Обо мне</router-link>
       </nav>
     </header>
-    <main>
-      <nuxt/>
-    </main>
+    <nuxt/>
   </div>
 </template>
 
@@ -22,6 +20,11 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  main{
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+  }
 
 </style>
