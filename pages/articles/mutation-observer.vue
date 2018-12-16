@@ -1,12 +1,10 @@
 <template>
-  <main>
-    <h1>Информация.</h1>
-  </main>
+  <div>Mutation observer</div>
 </template>
 
 <script>
   export default {
-    name: "about-me"
+
   }
 </script>
 
