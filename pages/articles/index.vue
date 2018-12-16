@@ -14,7 +14,7 @@
 <script>
   export default {
     name: "index",
-    metaInfo: {
+    head: {
       title: "Блог"
     }
   }
