@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   head: {
     titleTemplate: title => (title) ? `${title} - Bredik v2` : 'Bredik v2',
@@ -11,13 +9,9 @@ module.exports = {
       lang: 'ru',
     }
   },
-  modules: [
-    [
-      'nuxt-sass-resources-loader', [
-      'assets/scss/variables.scss',
-      'assets/scss/global.scss'
-    ]
-    ]
-  ],
+  css: [
+    '@/assets/scss/variables.scss',
+    '@/assets/scss/global.scss'
+  ]
 
 };
