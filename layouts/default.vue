@@ -4,22 +4,23 @@
       <logo>
         TsKon
       </logo>
-      <nav>
-        <router-link to="/">Главная</router-link>
-        <router-link to="/articles">Блог</router-link>
-        <router-link to="/about-me">Обо мне</router-link>
-      </nav>
+      <main-menu></main-menu>
     </header>
     <nuxt/>
   </div>
 </template>
 
 <script>
+  import mainMenu from '~/components/menu/main-menu';
+
   export default {
     head: {
       bodyAttrs: {
         class: 'body-default'
       }
+    },
+    components: {
+      mainMenu
     }
   }
 </script>
