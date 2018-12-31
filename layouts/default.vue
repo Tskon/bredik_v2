@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <header>
-      <logo>
+      <div>
         TsKon
-      </logo>
+      </div>
       <main-menu></main-menu>
     </header>
     <nuxt/>
