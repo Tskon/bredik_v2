@@ -11,6 +11,10 @@ module.exports = {
       lang: 'ru',
     }
   },
+  router: {
+    linkActiveClass: 'menu-active',
+    linkExactActiveClass: ''
+  },
   css: [
     '@/assets/scss/variables.scss',
     '@/assets/scss/global.scss'
