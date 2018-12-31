@@ -24,6 +24,7 @@
     padding: 0 10px;
     text-decoration: none;
     color: black;
+    white-space: nowrap;
     transition: .3s;
     &:hover{
       color: white;
