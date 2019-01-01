@@ -3,6 +3,7 @@
     <router-link class="main-menu__item" to="/" exact>Главная</router-link>
     <router-link class="main-menu__item" to="/articles">Блог</router-link>
     <router-link class="main-menu__item" to="/about-me">Обо мне</router-link>
+    <router-link class="main-menu__item" to="/projects">Проекты</router-link>
   </nav>
 </template>
 
