@@ -2,6 +2,7 @@
   <main>
     <h1>canvas-game</h1>
     <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight"></canvas>
+    <button @click="startGame">Старт</button>
   </main>
 </template>
 
@@ -12,6 +13,7 @@
       return {
         canvasWidth: 480,
         canvasHeight: 320,
+        interval: undefined,
       }
     },
     computed: {
@@ -101,6 +103,7 @@
             this.rightPressed = false;
             this.upPressed = false;
             this.downPressed = false;
+            this.isImmortal = false;
 
             this.init();
           }
@@ -166,12 +169,36 @@
               this.downPressed = false;
             }
           }
+
+          giveImmortal(sec) {
+            this.isImmortal = true;
+
+            const initColor = this.color;
+            const immortalColor = 'gold';
+
+            // Мигание при неуязвимости
+            const blinkInterval = setInterval(() => {
+              if (this.color === immortalColor) {
+                this.color = initColor;
+              } else {
+                this.color = immortalColor;
+              }
+            }, 100);
+
+            setTimeout(() => {
+              this.isImmortal = false;
+              clearInterval(blinkInterval);
+              this.color = initColor;
+            }, sec * 1000);
+          }
         }
 
         return new Hero(options, canvasWidth, canvasHeight);
       },
 
       createBall(options = {}, canvasWidth = this.canvasWidth, canvasHeight = this.canvasHeight) {
+        const game = this;
+
         class Circle {
           constructor(options) {
             this.cx = options.cx || 10;
@@ -186,6 +213,9 @@
             // Меняем направление, если уперлись в стенку
             this.checkWall();
 
+            // Проверяем удар о героя
+            this.checkHero();
+
             // Делаем шаг
             this.cx += this.stepX;
             this.cy += this.stepY;
@@ -199,13 +229,34 @@
               this.stepY = -this.stepY;
             }
           }
+
+          checkHero() {
+            // проверка на поппадание
+            if (this.cx - this.r < game.theHero.x + game.theHero.width && this.cx + this.r > game.theHero.x) {
+              if (this.cy + this.r > game.theHero.y && this.cy - this.r < game.theHero.y + game.theHero.height) {
+                if (!game.theHero.isImmortal) {
+                  console.log(this.color, 'hit!')
+                  game.stopGame();
+                }
+              }
+            }
+          }
         }
 
         return new Circle(options)
       },
+
+      startGame() {
+        this.interval = setInterval(this.mainDraw, 10);
+        this.theHero.giveImmortal(3);
+      },
+
+      stopGame() {
+        clearInterval(this.interval);
+      }
     },
     mounted() {
-      setInterval(this.mainDraw, 10);
+      this.startGame();
     }
   }
 </script>
