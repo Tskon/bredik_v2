@@ -25,13 +25,13 @@
       },
       ballsList() {
         return [
-          this.createBall({
-            cx: 100,
-            cy: 100,
-            r: 100,
-            color: "yellow",
-            speed: 1
-          }),
+          // this.createBall({
+          //   cx: 100,
+          //   cy: 100,
+          //   r: 100,
+          //   color: "yellow",
+          //   speed: 1
+          // }),
           this.createBall({
             cx: this.canvasWidth - 60,
             cy: this.canvasHeight - 60,
@@ -39,12 +39,11 @@
             color: "gold",
             speed: 2
           }),
-          this.createBall(),
-          this.createBall({
-            r: 5,
-            color: "red",
-            speed: 4
-          }),
+          // this.createBall({
+          //   r: 5,
+          //   color: "red",
+          //   speed: 4
+          // }),
         ]
       },
 
@@ -234,9 +233,24 @@
             // проверка на поппадание
             if (this.cx - this.r < game.theHero.x + game.theHero.width && this.cx + this.r > game.theHero.x) {
               if (this.cy + this.r > game.theHero.y && this.cy - this.r < game.theHero.y + game.theHero.height) {
-                if (!game.theHero.isImmortal) {
-                  console.log(this.color, 'hit!')
+                const x1 = game.theHero.x;
+                const x2 = game.theHero.x + game.theHero.width;
+                const y1 = game.theHero.y;
+                const y2 = game.theHero.y + game.theHero.height;
+
+                // проверка что герой неуязвим и что ни одна из крайних точек не пересекает границу круга
+                if (!game.theHero.isImmortal && (
+                    isCrossCircleLine(x1, y1, this.cx, this.cy, this.r) ||
+                    isCrossCircleLine(x1, y2, this.cx, this.cy, this.r) ||
+                    isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
+                    isCrossCircleLine(x2, y2, this.cx, this.cy, this.r)
+                )) {
                   game.stopGame();
+                }
+
+                function isCrossCircleLine(dotX, dotY, circleX, circleY, circleR) {
+                  // проверка что расстояние от точки до центра круга меньше радиуса
+                  return Math.pow(dotX - circleX, 2) + Math.pow(dotY - circleY, 2) < Math.pow(circleR, 2);
                 }
               }
             }
