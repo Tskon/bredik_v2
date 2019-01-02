@@ -37,6 +37,7 @@
             color: "gold",
             speed: 2
           }),
+          this.createBall(),
           this.createBall({
             r: 5,
             color: "red",
@@ -44,29 +45,133 @@
           }),
         ]
       },
+
+      theHero() {
+        return this.createHero({heroWidth: 20, heroHeight: 20})
+      }
     },
     methods: {
       mainDraw() {
         // Очищаем поле каждую итерацию отрисовки
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-        this.ballsList.forEach(ball=>{
+        this.ballsList.forEach(ball => {
           // Делам сдвиг в объекте мяча
           ball.move();
           // Рисуем мяч, аргумент - объект мяча
           this.drawBall(ball);
         });
+
+        // Двигаем героя, если требуется
+        this.theHero.move();
+        // Рисуем героя
+        this.drawHero(this.theHero);
       },
 
-      drawBall(circle) {
+      drawBall(circleObj) {
         this.ctx.beginPath();
-        this.ctx.arc(circle.cx, circle.cy, circle.r, 0, Math.PI * 2);
-        this.ctx.fillStyle = circle.color;
+        this.ctx.arc(circleObj.cx, circleObj.cy, circleObj.r, 0, Math.PI * 2);
+        this.ctx.fillStyle = circleObj.color;
         this.ctx.fill();
         this.ctx.closePath();
       },
 
-      createBall(options, canvasWidth = this.canvasWidth, canvasHeight = this.canvasHeight) {
+      drawHero(heroObj) {
+        this.ctx.beginPath();
+        this.ctx.rect(heroObj.x, heroObj.y, heroObj.width, heroObj.height);
+        this.ctx.fillStyle = heroObj.color;
+        this.ctx.fill();
+        this.ctx.closePath();
+      },
+
+      createHero(options = {}, canvasWidth = this.canvasWidth, canvasHeight = this.canvasHeight) {
+        class Hero {
+          constructor(options = {}, canvasWidth, canvasHeight) {
+            this.width = options.heroWidth || 20;
+            this.height = options.heroHeight || 20;
+            this.x = options.x || (canvasWidth - this.width) / 2;
+            this.y = options.y || canvasHeight - this.height;
+            this.color = options.color || 'darkblue';
+            this.leftBtn = options.rightBtn || 'ArrowLeft';
+            this.rightBtn = options.rightBtn || 'ArrowRight';
+            this.upBtn = options.rightBtn || 'ArrowUp';
+            this.downBtn = options.rightBtn || 'ArrowDown';
+            this.speed = options.speed || 2;
+            this.leftPressed = false;
+            this.rightPressed = false;
+            this.upPressed = false;
+            this.downPressed = false;
+
+            this.init();
+          }
+
+          move() {
+            if (this.leftPressed) {
+              this.x -= this.speed;
+              if (this.x < 0) this.x = 0;
+            }
+            if (this.rightPressed) {
+              this.x += this.speed;
+              const rightWallX = canvasWidth - this.width;
+              if (this.x > rightWallX) this.x = rightWallX;
+            }
+            if (this.upPressed) {
+              this.y -= this.speed;
+              if (this.y < 0) this.y = 0;
+            }
+            if (this.downPressed) {
+              this.y += this.speed;
+              const topWallY = canvasHeight - this.height;
+              if (this.y > topWallY) this.y = topWallY;
+            }
+          }
+
+          init() {
+            document.addEventListener('keydown', e => this.keyDownHandler(e));
+            document.addEventListener('keyup', e => this.keyUpHandler(e));
+          }
+
+          keyDownHandler(e) {
+            if (e.key === this.leftBtn) {
+              e.preventDefault();
+              this.leftPressed = true;
+            }
+            if (e.key === this.rightBtn) {
+              e.preventDefault();
+              this.rightPressed = true;
+            }
+            if (e.key === this.upBtn) {
+              e.preventDefault();
+              this.upPressed = true;
+            }
+            if (e.key === this.downBtn) {
+              e.preventDefault();
+              this.downPressed = true;
+            }
+          }
+
+          keyUpHandler(e) {
+            if (e.key === this.leftBtn) {
+              this.leftPressed = false;
+            }
+            if (e.key === this.rightBtn) {
+              this.rightPressed = false;
+            }
+            if (e.key === this.upBtn) {
+              e.preventDefault();
+              this.upPressed = false;
+            }
+            if (e.key === this.downBtn) {
+              e.preventDefault();
+              this.downPressed = false;
+            }
+          }
+        }
+
+        return new Hero(options, canvasWidth, canvasHeight);
+      },
+
+      createBall(options = {}, canvasWidth = this.canvasWidth, canvasHeight = this.canvasHeight) {
         class Circle {
           constructor(options) {
             this.cx = options.cx || 10;
