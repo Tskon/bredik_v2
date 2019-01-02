@@ -1,8 +1,11 @@
 <template>
   <main>
     <h1>canvas-game</h1>
-    <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight"></canvas>
-    <button @click="startGame">Старт</button>
+    <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
+    <div class="controls">
+      <button @click="startGame" class="controls__startBtn">Старт</button>
+      <button @click="stopGame" class="controls__stopBtn">Пауза</button>
+    </div>
   </main>
 </template>
 
@@ -14,6 +17,7 @@
         canvasWidth: 480,
         canvasHeight: 320,
         interval: undefined,
+        isGameStarted: false,
       }
     },
     computed: {
@@ -25,13 +29,13 @@
       },
       ballsList() {
         return [
-          // this.createBall({
-          //   cx: 100,
-          //   cy: 100,
-          //   r: 100,
-          //   color: "yellow",
-          //   speed: 1
-          // }),
+          this.createBall({
+            cx: 100,
+            cy: 100,
+            r: 100,
+            color: "yellow",
+            speed: 1
+          }),
           this.createBall({
             cx: this.canvasWidth - 60,
             cy: this.canvasHeight - 60,
@@ -39,11 +43,11 @@
             color: "gold",
             speed: 2
           }),
-          // this.createBall({
-          //   r: 5,
-          //   color: "red",
-          //   speed: 4
-          // }),
+          this.createBall({
+            r: 5,
+            color: "red",
+            speed: 4
+          }),
         ]
       },
 
@@ -240,10 +244,10 @@
 
                 // проверка что герой неуязвим и что ни одна из крайних точек не пересекает границу круга
                 if (!game.theHero.isImmortal && (
-                    isCrossCircleLine(x1, y1, this.cx, this.cy, this.r) ||
-                    isCrossCircleLine(x1, y2, this.cx, this.cy, this.r) ||
-                    isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
-                    isCrossCircleLine(x2, y2, this.cx, this.cy, this.r)
+                  isCrossCircleLine(x1, y1, this.cx, this.cy, this.r) ||
+                  isCrossCircleLine(x1, y2, this.cx, this.cy, this.r) ||
+                  isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
+                  isCrossCircleLine(x2, y2, this.cx, this.cy, this.r)
                 )) {
                   game.stopGame();
                 }
@@ -261,17 +265,18 @@
       },
 
       startGame() {
-        this.interval = setInterval(this.mainDraw, 10);
-        this.theHero.giveImmortal(3);
+        if (!this.isGameStarted) {
+          this.isGameStarted = true;
+          this.interval = setInterval(this.mainDraw, 10);
+          this.theHero.giveImmortal(3);
+        }
       },
 
       stopGame() {
         clearInterval(this.interval);
+        this.isGameStarted = false
       }
     },
-    mounted() {
-      this.startGame();
-    }
   }
 </script>
 
