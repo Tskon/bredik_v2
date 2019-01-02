@@ -3,8 +3,9 @@
     <h1>canvas-game</h1>
     <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
     <div class="controls">
-      <button @click="startGame" class="controls__startBtn">Старт</button>
-      <button @click="stopGame" class="controls__stopBtn">Пауза</button>
+      <button @click="gameStart" class="controls__startBtn">Старт</button>
+      <button @click="gameStop" class="controls__stopBtn">Пауза</button>
+      <button @click="reset" class="controls__stopBtn">Сбросить</button>
     </div>
   </main>
 </template>
@@ -14,10 +15,41 @@
     name: "canvas-game",
     data() {
       return {
-        canvasWidth: 480,
-        canvasHeight: 320,
+        canvasWidth: 640,
+        canvasHeight: 480,
+        heroSize: {w: 50, h: 50},
         interval: undefined,
         isGameStarted: false,
+        theHero: {},
+        ballsInitData: [
+          {
+            r: 5,
+            color: "red",
+            speed: 4
+          },
+          {
+            cx: 110,
+            cy: 105,
+            r: 100,
+            color: "yellow",
+            speed: 1
+          },
+          {
+            cx: 70,
+            cy: 100,
+            r: 50,
+            color: "seagreen",
+            speed: 1
+          },
+          {
+            cx: this.canvasWidth - 60,
+            cy: this.canvasHeight - 60,
+            r: 60,
+            color: "gold",
+            speed: 2
+          },
+        ],
+        ballsList: [],
       }
     },
     computed: {
@@ -27,35 +59,21 @@
       ctx() {
         return this.canvas.getContext('2d');
       },
-      ballsList() {
-        return [
-          this.createBall({
-            cx: 100,
-            cy: 100,
-            r: 100,
-            color: "yellow",
-            speed: 1
-          }),
-          this.createBall({
-            cx: this.canvasWidth - 60,
-            cy: this.canvasHeight - 60,
-            r: 60,
-            color: "gold",
-            speed: 2
-          }),
-          this.createBall({
-            r: 5,
-            color: "red",
-            speed: 4
-          }),
-        ]
-      },
-
-      theHero() {
-        return this.createHero({heroWidth: 20, heroHeight: 20})
-      }
     },
     methods: {
+      // Запустить после монтирования
+      gameInit() {
+        this.theHero = this.createHero({heroWidth: this.heroSize.w, heroHeight: this.heroSize.h});
+        this.ballsList = this.ballsInitData.map(ball => this.createBall(ball));
+
+        // отрисовываем начальное состояние
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.ballsList.forEach(ball => {
+          this.drawBall(ball);
+        });
+        this.drawHero(this.theHero);
+      },
+
       mainDraw() {
         // Очищаем поле каждую итерацию отрисовки
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -90,6 +108,7 @@
       },
 
       createHero(options = {}, canvasWidth = this.canvasWidth, canvasHeight = this.canvasHeight) {
+
         class Hero {
           constructor(options = {}, canvasWidth, canvasHeight) {
             this.width = options.heroWidth || 20;
@@ -204,8 +223,8 @@
 
         class Circle {
           constructor(options) {
-            this.cx = options.cx || 10;
-            this.cy = options.cy || 10;
+            this.cx = options.cx || canvasWidth / 2;
+            this.cy = options.cy || canvasHeight / 2;
             this.r = options.r || 10;
             this.color = options.color || 'black';
             this.stepX = options.speed || 2;
@@ -249,7 +268,7 @@
                   isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
                   isCrossCircleLine(x2, y2, this.cx, this.cy, this.r)
                 )) {
-                  game.stopGame();
+                  game.gameStop();
                 }
 
                 function isCrossCircleLine(dotX, dotY, circleX, circleY, circleR) {
@@ -264,7 +283,16 @@
         return new Circle(options)
       },
 
-      startGame() {
+      getImage(url = '/', width = 50, height = 50, cb = image => {
+        this.ctx.fillStyle = this.ctx.createPattern(image, "repeat");
+        this.ctx.fillRect(0, 0, width, height);
+      }) {
+        const image = new Image();
+        image.src = url;
+        image.onload = cb(image);
+      },
+
+      gameStart() {
         if (!this.isGameStarted) {
           this.isGameStarted = true;
           this.interval = setInterval(this.mainDraw, 10);
@@ -272,11 +300,19 @@
         }
       },
 
-      stopGame() {
+      gameStop() {
         clearInterval(this.interval);
         this.isGameStarted = false
+      },
+
+      reset() {
+        this.gameStop();
+        this.gameInit();
       }
     },
+    mounted() {
+      this.gameInit();
+    }
   }
 </script>
 
