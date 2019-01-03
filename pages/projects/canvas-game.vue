@@ -6,11 +6,13 @@
       Управление: двигать квадрат можно стрелками, после старта дается неуязвимость
       (отображается миганием квадрата).
     </p>
-    <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
-    <div class="controls">
-      <button @click="gameStart" class="controls__startBtn">Старт</button>
-      <button @click="gameStop" class="controls__stopBtn">Пауза</button>
-      <button @click="reset" class="controls__stopBtn">Сбросить</button>
+    <div class="wrapper">
+      <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
+      <div class="controls">
+        <button @click="gameStart" class="controls__startBtn">Старт</button>
+        <button @click="gameStop" class="controls__stopBtn">Пауза</button>
+        <button @click="reset" class="controls__resetBtn">Сбросить</button>
+      </div>
     </div>
   </main>
 </template>
@@ -316,7 +318,7 @@
           this.isGameStarted = true;
 
           const animate = highResTimestamp => {
-            if (this.isGameStarted){
+            if (this.isGameStarted) {
               requestAnimationFrame(animate);
               this.mainDraw();
             }
@@ -342,10 +344,57 @@
   }
 </script>
 
-<style scoped>
-  canvas {
+<style scoped lang="scss">
+  .wrapper {
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+  .game-board {
     background: #eee;
     display: block;
-    margin: 0 auto;
+    float: left;
+    border: 2px solid darkgreen;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    button {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 2px solid;
+      width: 100px;
+      background-color: transparent;
+      font-weight: bold;
+    }
+    .controls__startBtn{
+      border-color: darkgreen;
+      color: darkgreen;
+      &:hover{
+        color: white;
+        background-color: darkgreen;
+      }
+    }
+    .controls__stopBtn{
+      border-color: darkgoldenrod;
+      color: darkgoldenrod;
+      &:hover{
+        color: white;
+        background-color: darkgoldenrod;
+      }
+    }
+    .controls__resetBtn{
+      border-color: darkred;
+      color: darkred;
+      &:hover{
+        color: white;
+        background-color: darkred;
+      }
+    }
   }
 </style>
