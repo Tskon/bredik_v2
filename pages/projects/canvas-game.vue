@@ -3,7 +3,7 @@
     <h1>canvas-game</h1>
     <p>Цель игры: не попасться квадратом на движущиеся шары.</p>
     <p>
-      Управление квадратом: двигать квадрат можно стрелками, после старта дается неуязвимость
+      Управление: двигать квадрат можно стрелками, после старта дается неуязвимость
       (отображается миганием квадрата).
     </p>
     <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
@@ -294,14 +294,14 @@
                   isCrossCircleLine(x1, y2, this.cx, this.cy, this.r) ||
                   isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
                   isCrossCircleLine(x2, y2, this.cx, this.cy, this.r) ||
-                  Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2)) < this.r + ((game.theHero.width + game.theHero.height) / 2)
+                  Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2)) < this.r + ((game.theHero.width + game.theHero.height) / 2.5)
                 )) {
                   game.gameStop();
                 }
 
                 function isCrossCircleLine(dotX, dotY, circleX, circleY, circleR) {
                   // проверка что расстояние от точки до центра круга меньше радиуса
-                  return Math.pow(dotX - circleX, 2) + Math.pow(dotY - circleY, 2) < Math.pow(circleR, 2);
+                  return Math.pow((dotX - circleX), 2) + Math.pow((dotY - circleY), 2) < Math.pow(circleR, 2);
                 }
               }
             }
