@@ -23,7 +23,6 @@
         canvasWidth: 640,
         canvasHeight: 480,
         heroSize: {w: 50, h: 50},
-        interval: undefined,
         isGameStarted: false,
         theHero: {},
         ballsInitData: [
@@ -315,13 +314,20 @@
       gameStart() {
         if (!this.isGameStarted) {
           this.isGameStarted = true;
-          this.interval = setInterval(this.mainDraw, 10);
+
+          const animate = highResTimestamp => {
+            if (this.isGameStarted){
+              requestAnimationFrame(animate);
+              this.mainDraw();
+            }
+          };
+          requestAnimationFrame(animate);
+
           this.theHero.giveImmortal(3);
         }
       },
 
       gameStop() {
-        clearInterval(this.interval);
         this.isGameStarted = false
       },
 
