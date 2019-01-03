@@ -2,6 +2,7 @@
   <ul class="projects-menu">
     <li class="projects-menu__item">
       <router-link class="projects-menu__item" to="/projects/canvas-game">Игра на canvas</router-link>
+      <router-link class="projects-menu__item" to="/projects/vue-game">Игра на vue (+vuex)</router-link>
     </li>
   </ul>
 </template>

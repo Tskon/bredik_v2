@@ -3,10 +3,9 @@
 </template>
 
 <script>
-  import vueGame from 'components/vue-game/index'
+  import vueGame from '~/components/vue-game/index'
 
   export default {
-    name: "vue-game",
     components:{
       vueGame
     }
