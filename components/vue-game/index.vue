@@ -30,5 +30,6 @@
     background: url("/vue-game/tiles/ground01.gif") repeat-y;
     background-size: contain;
     position: relative;
+    overflow: hidden;
   }
 </style>
