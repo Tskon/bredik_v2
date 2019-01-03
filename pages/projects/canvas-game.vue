@@ -28,27 +28,27 @@
             color: "red",
             speed: 1
           },
-          // {
-          //   cx: 250,
-          //   cy: 105,
-          //   r: 30,
-          //   color: "yellow",
-          //   speed: 1
-          // },
-          // {
-          //   cx: 500,
-          //   cy: 400,
-          //   r: 50,
-          //   color: "seagreen",
-          //   speed: 1
-          // },
-          // {
-          //   cx: 60,
-          //   cy: 60,
-          //   r: 20,
-          //   color: "gold",
-          //   speed: 2
-          // },
+          {
+            cx: 250,
+            cy: 105,
+            r: 30,
+            color: "yellow",
+            speed: 1
+          },
+          {
+            cx: 500,
+            cy: 400,
+            r: 50,
+            color: "seagreen",
+            speed: 1
+          },
+          {
+            cx: 60,
+            cy: 60,
+            r: 20,
+            color: "gold",
+            speed: 2
+          },
         ],
         ballsList: [],
       }
