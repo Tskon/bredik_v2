@@ -1,7 +1,7 @@
 <template>
   <main>
-    <div class="game-wrapper">
-    <hero></hero>
+    <div class="game-wrapper" :style="{backgroundPositionY: yTranslation + 'px'}">
+      <hero></hero>
     </div>
     <p>Спрайты и картинки от Louis Ferina</p>
   </main>
@@ -13,12 +13,15 @@
   export default {
     components: {Hero},
     computed: {
-    }
+      yTranslation() {
+        return this.$store.state.vueGame.gameMap.yTranslation;
+      }
+    },
   }
 </script>
 
 <style scoped lang="scss">
-  .game-wrapper{
+  .game-wrapper {
     width: 900px;
     height: 600px;
     border: 2px solid darkgreen;

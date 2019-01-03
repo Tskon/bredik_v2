@@ -2,11 +2,12 @@ export const state = () => ({
   // карта координат. Хранит диапазоны координат и колбеки
   xyMap: {},
 
-  map: {
+  gameMap: {
     size: {
       width: 900,
       height: 600
-    }
+    },
+    yTranslation: 0
   },
 
   hero: {
@@ -36,11 +37,11 @@ export const mutations = {
   heroMoveX(state, x) {
     let newPos = state.hero.position.x += x;
     if (newPos < 0) newPos = 0;
-    const lastXPoint = state.map.size.width - state.hero.size.width - 4;
+    const lastXPoint = state.gameMap.size.width - state.hero.size.width - 4;
     if (newPos > lastXPoint) newPos = lastXPoint;
     state.hero.position.x = newPos;
   },
   heroMoveY(state, y) {
-    state.hero.position.y += y;
+    state.gameMap.yTranslation -= y;
   }
 };
