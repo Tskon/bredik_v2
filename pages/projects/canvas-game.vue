@@ -1,7 +1,11 @@
 <template>
   <main>
     <h1>canvas-game</h1>
-    <p>Не попасться под движение кружков</p>
+    <p>Цель игры: не попасться квадратом на движущиеся шары.</p>
+    <p>
+      Управление квадратом: двигать квадрат можно стрелками, после старта дается неуязвимость
+      (отображается миганием квадрата).
+    </p>
     <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
     <div class="controls">
       <button @click="gameStart" class="controls__startBtn">Старт</button>
@@ -26,14 +30,14 @@
           {
             r: 5,
             color: "red",
-            speed: 1
+            speed: 3
           },
           {
             cx: 250,
             cy: 105,
             r: 30,
             color: "yellow",
-            speed: 1
+            speed: 2
           },
           {
             cx: 500,
@@ -47,7 +51,7 @@
             cy: 60,
             r: 20,
             color: "gold",
-            speed: 2
+            speed: 3
           },
         ],
         ballsList: [],
@@ -256,18 +260,19 @@
           }
 
           checkBalls() {
-            game.ballsList.forEach(ball=>{
-              if (ball.cx !== this.cx && ball.cy !== this.cy){ // проверяем что это другой шар
+            game.ballsList.forEach(ball => {
+              if (ball.cx !== this.cx && ball.cy !== this.cy) { // проверяем что это другой шар
                 let diffX = ball.cx - this.cx;
                 if (diffX < 0) diffX = -diffX;
 
                 let diffY = ball.cy - this.cy;
                 if (diffY < 0) diffY = -diffY;
 
-                if(Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2)) < this.r + ball.r){
-                    this.stepX = -this.stepX;
-                    this.stepY = -this.stepY;
-                };
+                if (Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2)) < this.r + ball.r) {
+                  this.stepX = -this.stepX;
+                  this.stepY = -this.stepY;
+                }
+                ;
               }
             });
           }
@@ -276,14 +281,28 @@
             // проверка на поппадание
             if (this.cx - this.r < game.theHero.x + game.theHero.width && this.cx + this.r > game.theHero.x) {
               if (this.cy + this.r > game.theHero.y && this.cy - this.r < game.theHero.y + game.theHero.height) {
+                const x1 = game.theHero.x;
+                const x2 = game.theHero.x + game.theHero.width;
+                const y1 = game.theHero.y;
+                const y2 = game.theHero.y + game.theHero.height;
 
-                let diffX = game.theHero.x + (game.theHero.width/2) - this.cx;
-                let diffY = game.theHero.y + (game.theHero.height/2) - this.cy;
+                let diffX = game.theHero.x + (game.theHero.width / 2) - this.cx;
+                let diffY = game.theHero.y + (game.theHero.height / 2) - this.cy;
 
+                // проверка что герой неуязвим и что ни одна из крайних точек или центром стороны не пересекает границу круга
                 if (!game.theHero.isImmortal && (
-                  Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2)) < this.r + ((game.theHero.width + game.theHero.height)/2)
+                  isCrossCircleLine(x1, y1, this.cx, this.cy, this.r) ||
+                  isCrossCircleLine(x1, y2, this.cx, this.cy, this.r) ||
+                  isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
+                  isCrossCircleLine(x2, y2, this.cx, this.cy, this.r) ||
+                  Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2)) < this.r + ((game.theHero.width + game.theHero.height) / 2)
                 )) {
                   game.gameStop();
+                }
+
+                function isCrossCircleLine(dotX, dotY, circleX, circleY, circleR) {
+                  // проверка что расстояние от точки до центра круга меньше радиуса
+                  return Math.pow(dotX - circleX, 2) + Math.pow(dotY - circleY, 2) < Math.pow(circleR, 2);
                 }
               }
             }
