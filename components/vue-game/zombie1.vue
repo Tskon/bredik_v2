@@ -16,15 +16,14 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex';
 
   export default {
     name: "zombie1",
     data() {
       return {
         isSpawn: false,
-        isWalk: true,
-        direction: 'down',
+        isWalk: false,
+        direction: 'left',
         zombie1: {
           size:{width:0, height:0},
           position:{x:0, y:0}
@@ -38,19 +37,20 @@
     },
     methods: {
       initZombie(){
-        this.zombie1 = this.$store.state.vueGame.zombie1;
+        this.zombie1 = {
+          ...this.$store.state.vueGame.zombie1,
+          position:{...this.$store.state.vueGame.zombie1.position},
+          parameters:{...this.$store.state.vueGame.zombie1.parameters}
+        };
       },
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
+          this.zombie1.position.x += (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed;
 
         } else if (this.direction === 'up' || this.direction === 'down') {
-
+          this.zombie1.position.y += (this.direction === 'up') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed;
         }
       },
-      ...mapMutations({
-        zombie1MoveX: 'vueGame/zombie1MoveX',
-        zombie1MoveY: 'vueGame/zombie1MoveY',
-      })
     },
     mounted() {
       // полуаем начальные значения из стора
@@ -88,7 +88,7 @@
   }
 
   .zombie_walk {
-    background: url("/vue-game/sprites/zombie1_walk1.gif") no-repeat;
+    background: url("/vue-game/sprites/zombie1_walk2.gif") no-repeat;
     background-position: center;
     background-size: 100%;
   }

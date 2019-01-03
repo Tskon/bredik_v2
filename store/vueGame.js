@@ -43,7 +43,7 @@ export const state = () => ({
     },
     parameters: {
       hp: 100,
-      speed: 2,
+      speed: 1,
     }
   }
 });
@@ -59,10 +59,4 @@ export const mutations = {
   heroMoveY(state, y) {
     state.gameMap.yTranslation -= y;
   },
-  zombie1MoveX(){
-
-  },
-  zombie1MoveY(){
-
-  }
 };
