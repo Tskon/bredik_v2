@@ -4,15 +4,22 @@ export const state = () => ({
 
   },
 
+  map:{
+    size: {
+      width: 900,
+      height: 600
+    }
+  },
+
   hero: {
     immortal: false,
     size:{
-      width: 50,
-      height: 50,
+      width: 80,
+      height: 80,
     },
     position: {
-      x: 0,
-      y: 0,
+      x: 410,
+      y: 400,
     },
     ammo:{
       m4a1: false,
@@ -21,20 +28,18 @@ export const state = () => ({
     parameters:{
       hp: 100,
       armor: 50,
-      speed: 10,
+      speed:4,
     }
   }
 
 });
 
 export const mutations = {
-  add (state, text) {
-    state.list.push({
-      text: text,
-      done: false
-    })
-  },
-  toggle (state, todo) {
-    todo.done = !todo.done
+  heroMoveX(state, x){
+    let newPos = state.hero.position.x += x;
+    if (newPos < 0) newPos = 0;
+    const lastXPoint = state.map.size.width - state.hero.size.width - 4;
+    if (newPos > lastXPoint) newPos = lastXPoint;
+    state.hero.position.x = newPos;
   }
 };
