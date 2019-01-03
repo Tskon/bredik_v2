@@ -1,6 +1,7 @@
 <template>
   <main>
     <h1>canvas-game</h1>
+    <p>Не попасться под движение кружков</p>
     <canvas id="canvas-game" :width="canvasWidth" :height="canvasHeight" class="game-board"></canvas>
     <div class="controls">
       <button @click="gameStart" class="controls__startBtn">Старт</button>
@@ -25,29 +26,29 @@
           {
             r: 5,
             color: "red",
-            speed: 4
-          },
-          {
-            cx: 110,
-            cy: 105,
-            r: 100,
-            color: "yellow",
             speed: 1
           },
-          {
-            cx: 70,
-            cy: 100,
-            r: 50,
-            color: "seagreen",
-            speed: 1
-          },
-          {
-            cx: this.canvasWidth - 60,
-            cy: this.canvasHeight - 60,
-            r: 60,
-            color: "gold",
-            speed: 2
-          },
+          // {
+          //   cx: 250,
+          //   cy: 105,
+          //   r: 30,
+          //   color: "yellow",
+          //   speed: 1
+          // },
+          // {
+          //   cx: 500,
+          //   cy: 400,
+          //   r: 50,
+          //   color: "seagreen",
+          //   speed: 1
+          // },
+          // {
+          //   cx: 60,
+          //   cy: 60,
+          //   r: 20,
+          //   color: "gold",
+          //   speed: 2
+          // },
         ],
         ballsList: [],
       }
@@ -108,7 +109,6 @@
       },
 
       createHero(options = {}, canvasWidth = this.canvasWidth, canvasHeight = this.canvasHeight) {
-
         class Hero {
           constructor(options = {}, canvasWidth, canvasHeight) {
             this.width = options.heroWidth || 20;
@@ -238,6 +238,9 @@
             // Проверяем удар о героя
             this.checkHero();
 
+            // Проверяем удар о другие мячи
+            this.checkBalls();
+
             // Делаем шаг
             this.cx += this.stepX;
             this.cy += this.stepY;
@@ -252,28 +255,35 @@
             }
           }
 
+          checkBalls() {
+            game.ballsList.forEach(ball=>{
+              if (ball.cx !== this.cx && ball.cy !== this.cy){ // проверяем что это другой шар
+                let diffX = ball.cx - this.cx;
+                if (diffX < 0) diffX = -diffX;
+
+                let diffY = ball.cy - this.cy;
+                if (diffY < 0) diffY = -diffY;
+
+                if(Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2)) < this.r + ball.r){
+                    this.stepX = -this.stepX;
+                    this.stepY = -this.stepY;
+                };
+              }
+            });
+          }
+
           checkHero() {
             // проверка на поппадание
             if (this.cx - this.r < game.theHero.x + game.theHero.width && this.cx + this.r > game.theHero.x) {
               if (this.cy + this.r > game.theHero.y && this.cy - this.r < game.theHero.y + game.theHero.height) {
-                const x1 = game.theHero.x;
-                const x2 = game.theHero.x + game.theHero.width;
-                const y1 = game.theHero.y;
-                const y2 = game.theHero.y + game.theHero.height;
 
-                // проверка что герой неуязвим и что ни одна из крайних точек не пересекает границу круга
+                let diffX = game.theHero.x + (game.theHero.width/2) - this.cx;
+                let diffY = game.theHero.y + (game.theHero.height/2) - this.cy;
+
                 if (!game.theHero.isImmortal && (
-                  isCrossCircleLine(x1, y1, this.cx, this.cy, this.r) ||
-                  isCrossCircleLine(x1, y2, this.cx, this.cy, this.r) ||
-                  isCrossCircleLine(x2, y1, this.cx, this.cy, this.r) ||
-                  isCrossCircleLine(x2, y2, this.cx, this.cy, this.r)
+                  Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2)) < this.r + ((game.theHero.width + game.theHero.height)/2)
                 )) {
                   game.gameStop();
-                }
-
-                function isCrossCircleLine(dotX, dotY, circleX, circleY, circleR) {
-                  // проверка что расстояние от точки до центра круга меньше радиуса
-                  return Math.pow(dotX - circleX, 2) + Math.pow(dotY - circleY, 2) < Math.pow(circleR, 2);
                 }
               }
             }
@@ -281,15 +291,6 @@
         }
 
         return new Circle(options)
-      },
-
-      getImage(url = '/', width = 50, height = 50, cb = image => {
-        this.ctx.fillStyle = this.ctx.createPattern(image, "repeat");
-        this.ctx.fillRect(0, 0, width, height);
-      }) {
-        const image = new Image();
-        image.src = url;
-        image.onload = cb(image);
       },
 
       gameStart() {
