@@ -5,7 +5,7 @@
        hero_stay: !isWalk,
        hero_walk: isWalk,
        hero_shoot: isShoot,
-       hero_top: direction === 'top',
+       hero_up: direction === 'up',
        hero_right: direction === 'right',
        hero_down: direction === 'down',
        }"
@@ -26,7 +26,7 @@
       return {
         isWalk: false,
         isShoot: false,
-        direction: 'top',
+        direction: 'up',
         directionCodes: {
           'left': 37,
           'up': 38,
@@ -51,7 +51,7 @@
             this.direction = 'left';
           }
           if (e.keyCode === 38) {
-            this.direction = 'top';
+            this.direction = 'up';
           }
           if (e.keyCode === 39) {
             this.direction = 'right';
@@ -71,10 +71,13 @@
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
           this.heroMoveX((this.direction === 'left') ? -this.hero.parameters.speed : this.hero.parameters.speed)
+        } else if (this.direction === 'up' || this.direction === 'down') {
+          this.heroMoveY((this.direction === 'up') ? -this.hero.parameters.speed : this.hero.parameters.speed)
         }
       },
       ...mapMutations({
-        heroMoveX: 'vueGame/heroMoveX'
+        heroMoveX: 'vueGame/heroMoveX',
+        heroMoveY: 'vueGame/heroMoveY',
       })
     },
     mounted() {
@@ -116,7 +119,7 @@
     transform: rotate(180deg);
   }
 
-  .hero_top {
+  .hero_up {
     transform: rotate(90deg);
   }
 
