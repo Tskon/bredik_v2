@@ -2,6 +2,7 @@
   <main>
     <div class="game-wrapper" :style="{backgroundPositionY: yTranslation + 'px'}">
       <hero></hero>
+      <zombie1></zombie1>
     </div>
     <p>Спрайты и картинки от Louis Ferina</p>
   </main>
@@ -9,9 +10,10 @@
 
 <script>
   import Hero from './hero';
+  import Zombie1 from './zombie1';
 
   export default {
-    components: {Hero},
+    components: {Hero, Zombie1},
     computed: {
       yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
