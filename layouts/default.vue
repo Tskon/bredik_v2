@@ -26,10 +26,10 @@
 </script>
 
 <style scoped lang="scss">
-  main{
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
+  .container{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px;
   }
 
 </style>
