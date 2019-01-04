@@ -8,10 +8,10 @@
        zombie_down: direction === 'down',
        }"
        :style="{
-       width: zombie1.size.width + 'px',
-       height: zombie1.size.height + 'px',
-       top: zombie1.position.y + yTranslation + 'px',
-       left: zombie1.position.x + 'px',
+       width: zombie1 ? zombie1.size.width + 'px' : 0,
+       height: zombie1 ? zombie1.size.height + 'px' : 0,
+       top: zombie1 ? zombie1.position.y + yTranslation + 'px' : 0,
+       left: zombie1 ? zombie1.position.x + 'px' : 0,
        }"></div>
 </template>
 
@@ -23,13 +23,14 @@
     data() {
       return {
         isSpawn: false,
-        isWalk: false,
+        isWalk: true,
         direction: 'left',
+        zombie1Index: 0,
       }
     },
     computed: {
       zombie1() {
-        return this.$store.state.vueGame.zombie1;
+        return this.$store.state.vueGame.zombie1List[this.zombie1Index];
       },
       yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
@@ -38,36 +39,51 @@
     methods: {
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
-          this.zombie1.position.x += (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed;
-
+          this.zombie1MoveX(
+            (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
+            this.zombie1.index
+          );
         } else if (this.direction === 'up' || this.direction === 'down') {
-          this.zombie1.position.y += (this.direction === 'up') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed;
+          this.zombie1MoveX(
+            (this.direction === 'up') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
+            this.zombie1.index
+          );
         }
       },
-      initZombie(){
-        return {
-          immortal: false,
-          size: {
-            width: 80,
-            height: 80,
-          },
-          position: {
-            x: 410,
-            y: 100,
-          },
-          parameters: {
-            hp: 100,
-            speed: 1,
+      initZombie(i) {
+        class Zombie1 {
+          constructor(index) {
+            this.immortal = false;
+            this.index = index; // номер в массиве зомби во vuex
+            this.size = {
+              width: 80,
+              height:
+                80,
+            };
+            this.position = {
+              x: 410,
+              y:
+                100,
+            };
+            this.parameters = {
+              hp: 100,
+              speed:
+                1,
+            }
           }
-        }
+        };
+        return new Zombie1(i);
       },
       ...mapMutations({
-        addZombie1: 'vueGame/addZombie1'
+        addZombie1: 'vueGame/addZombie1',
+        zombie1MoveX: 'vueGame/zombie1MoveX',
+        zombie1MoveY: 'vueGame/zombie1MoveY',
       })
     },
     mounted() {
       // добавляем экзкмпляр в массив в сторе
-      this.addZombie1(this.initZombie());
+      this.zombie1Index = this.$store.state.vueGame.zombie1List.length;
+      this.addZombie1(this.initZombie(this.zombie1Index));
 
       // включаем анимацию
       const animate = highResTimestamp => {
