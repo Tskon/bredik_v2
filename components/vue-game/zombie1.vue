@@ -16,6 +16,7 @@
 </template>
 
 <script>
+  import {mapMutations} from 'vuex';
 
   export default {
     name: "zombie1",
@@ -24,25 +25,17 @@
         isSpawn: false,
         isWalk: false,
         direction: 'left',
-        zombie1: {
-          size:{width:0, height:0},
-          position:{x:0, y:0}
-        }
       }
     },
     computed: {
-      yTranslation(){
+      zombie1() {
+        return this.$store.state.vueGame.zombie1;
+      },
+      yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
-      }
+      },
     },
     methods: {
-      initZombie(){
-        this.zombie1 = {
-          ...this.$store.state.vueGame.zombie1,
-          position:{...this.$store.state.vueGame.zombie1.position},
-          parameters:{...this.$store.state.vueGame.zombie1.parameters}
-        };
-      },
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
           this.zombie1.position.x += (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed;
@@ -51,10 +44,30 @@
           this.zombie1.position.y += (this.direction === 'up') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed;
         }
       },
+      initZombie(){
+        return {
+          immortal: false,
+          size: {
+            width: 80,
+            height: 80,
+          },
+          position: {
+            x: 410,
+            y: 100,
+          },
+          parameters: {
+            hp: 100,
+            speed: 1,
+          }
+        }
+      },
+      ...mapMutations({
+        addZombie1: 'vueGame/addZombie1'
+      })
     },
     mounted() {
-      // полуаем начальные значения из стора
-      this.initZombie();
+      // добавляем экзкмпляр в массив в сторе
+      this.addZombie1(this.initZombie());
 
       // включаем анимацию
       const animate = highResTimestamp => {
