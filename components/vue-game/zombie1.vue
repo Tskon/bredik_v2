@@ -23,6 +23,7 @@
     data() {
       return {
         isSpawn: false,
+        isDead: false,
         isWalk: true,
         direction: 'left',
         zombie1Index: 0,
@@ -35,14 +36,22 @@
       yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
       },
+      mapWidth(){
+        return this.$store.state.vueGame.gameMap.size.width;
+      }
     },
     methods: {
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
-          this.zombie1MoveX(
-            (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
-            this.zombie1.index
-          );
+          if (this.zombie1.position.x < -200 || this.zombie1.position.x > this.mapWidth + 200){
+            this.isDead = true;
+            this.zombie1Del(this.zombie1Index);
+          }else {
+            this.zombie1MoveX(
+              (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
+              this.zombie1.index
+            );
+          }
         } else if (this.direction === 'up' || this.direction === 'down') {
           this.zombie1MoveX(
             (this.direction === 'up') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
@@ -78,6 +87,7 @@
         addZombie1: 'vueGame/addZombie1',
         zombie1MoveX: 'vueGame/zombie1MoveX',
         zombie1MoveY: 'vueGame/zombie1MoveY',
+        zombie1Del: 'vueGame/zombie1Del',
       })
     },
     mounted() {
@@ -88,7 +98,7 @@
       // включаем анимацию
       const animate = highResTimestamp => {
         requestAnimationFrame(animate);
-        if (this.isWalk) {
+        if (this.isWalk && !this.isDead) {
           this.move();
         }
       };

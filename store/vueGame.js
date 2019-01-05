@@ -31,7 +31,26 @@ export const state = () => ({
     }
   },
 
-  zombie1List: [],
+  zombie1List: [
+    // {
+    //   immortal: false,
+    //   index: 22, // номер в массиве зомби во vuex
+    //   size: {
+    //     width: 80,
+    //     height: 80,
+    //   },
+    //   position: {
+    //     x: 410,
+    //     y:
+    //       100,
+    //   },
+    //   parameters: {
+    //     hp: 100,
+    //     speed:
+    //       1,
+    //   }
+    // }
+  ],
 });
 
 export const mutations = {
@@ -46,14 +65,16 @@ export const mutations = {
     state.gameMap.yTranslation -= dy;
   },
 
-  addZombie1(state, zombie){
+  addZombie1(state, zombie) {
     state.zombie1List.push(zombie);
   },
   zombie1MoveX(state, dx, i) {
-    if(i && state.zombie1List[0]) state.zombie1List[0].position.x += dx;
-    console.log(state.zombie1List[0])
+    state.zombie1List[0].position.x += dx;
   },
   zombie1MoveY(state, dy, i) {
-    if(i && state.zombie1List[0]) state.zombie1List[i].position.y += dy;
+    state.zombie1List[i].position.y += dy;
+  },
+  zombie1Del(state, i) {
+    state.zombie1List[i] = null;
   },
 };
