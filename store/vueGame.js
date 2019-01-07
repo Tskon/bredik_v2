@@ -27,7 +27,7 @@ export const state = () => ({
     parameters: {
       hp: 100,
       armor: 50,
-      speed: 4,
+      speed: 5,
     }
   },
 
@@ -54,15 +54,15 @@ export const state = () => ({
 });
 
 export const mutations = {
-  heroMoveX(state, dx) {
-    let newPos = state.hero.position.x += dx;
+  heroMove(state, delta) {
+    let newPos = state.hero.position.x += delta.x;
     if (newPos < 0) newPos = 0;
     const lastXPoint = state.gameMap.size.width - state.hero.size.width - 4;
     if (newPos > lastXPoint) newPos = lastXPoint;
     state.hero.position.x = newPos;
   },
-  heroMoveY(state, dy) {
-    state.gameMap.yTranslation -= dy;
+  yTranslationChange(state, delta) {
+    state.gameMap.yTranslation -= delta;
   },
 
   addZombie1(state, zombie) {

@@ -12,13 +12,13 @@
        :style="{
        width: hero.size.width + 'px',
        height: hero.size.height + 'px',
-       top: hero.position.y + 'px',
-       left: hero.position.x + 'px',
+       top: hero.position.y + cacheMove.y + 'px',
+       left: hero.position.x + cacheMove.x + 'px',
        }"></div>
 </template>
 
 <script>
-  import {mapMutations} from 'vuex';
+  import { mapMutations } from 'vuex';
 
   export default {
     name: "hero",
@@ -32,12 +32,16 @@
           'up': 38,
           'right': 39,
           'down': 40,
-        }
+        },
+        cacheMove: { x: 0, y: 0 }, // для уменьшения количества запросов к стору
       }
     },
     computed: {
       hero() {
         return this.$store.state.vueGame.hero;
+      },
+      mapWidth() {
+        return this.$store.state.vueGame.gameMap.size.width;
       }
     },
     methods: {
@@ -70,21 +74,39 @@
       },
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
-          this.heroMoveX((this.direction === 'left') ? -this.hero.parameters.speed : this.hero.parameters.speed)
+          let deltaMod = (this.direction === 'left') ? -this.hero.parameters.speed : this.hero.parameters.speed;
+          let newCacheVal = this.hero.position.x + this.cacheMove.x + deltaMod;
+          if (newCacheVal < 0 || newCacheVal > this.mapWidth - this.hero.size.width*1.5) deltaMod = 0;
+
+          this.cacheMove.x += deltaMod;
+
         } else if (this.direction === 'up' || this.direction === 'down') {
-          this.heroMoveY((this.direction === 'up') ? -this.hero.parameters.speed : this.hero.parameters.speed)
+          (this.direction === 'up') ?
+            this.yTranslationChange(-this.hero.parameters.speed) :
+            this.yTranslationChange(this.hero.parameters.speed);
         }
       },
+      cachingMoveRequests(){
+        setInterval(()=>{
+          if(this.cacheMove.x || this.cacheMove.y) {
+            this.heroMove(
+              this.cacheMove
+            );
+            this.cacheMove.x = 0;
+          }
+        }, 200);
+      },
       ...mapMutations({
-        heroMoveX: 'vueGame/heroMoveX',
-        heroMoveY: 'vueGame/heroMoveY',
+        heroMove: 'vueGame/heroMove',
+        yTranslationChange: 'vueGame/yTranslationChange'
       })
     },
     mounted() {
       document.addEventListener('keydown', e => this.keyDownHandler(e));
       document.addEventListener('keyup', e => this.keyUpHandler(e));
 
-      // включаем анимацию
+      // включаем анимацию и кэш для уменьшения количества запросов в стор
+      this.cachingMoveRequests();
       const animate = highResTimestamp => {
         requestAnimationFrame(animate);
         if (this.isWalk) {
