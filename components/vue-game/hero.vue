@@ -88,7 +88,7 @@
       },
       cachingMoveRequests(){
         setInterval(()=>{
-          if(this.cacheMove.x || this.cacheMove.y) {
+          if(this.cacheMove.x) {
             this.heroMove(
               this.cacheMove
             );
