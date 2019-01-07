@@ -68,12 +68,13 @@ export const mutations = {
   addZombie1(state, zombie) {
     state.zombie1List.push(zombie);
   },
-  zombie1MoveX(state, dx, i) {
-    state.zombie1List[0].position.x += dx;
+  zombie1Move(state, deltaObj, i) {
+    if (deltaObj.x) state.zombie1List[0].position.x += deltaObj.x;
+    if (deltaObj.y) state.zombie1List[0].position.y += deltaObj.y;
   },
-  zombie1MoveY(state, dy, i) {
-    state.zombie1List[i].position.y += dy;
-  },
+  // zombie1MoveY(state, dy, i) {
+  //   state.zombie1List[i].position.y += dy;
+  // },
   zombie1Del(state, i) {
     state.zombie1List[i] = null;
   },

@@ -10,13 +10,13 @@
        :style="{
        width: zombie1 ? zombie1.size.width + 'px' : 0,
        height: zombie1 ? zombie1.size.height + 'px' : 0,
-       top: zombie1 ? zombie1.position.y + yTranslation + 'px' : 0,
-       left: zombie1 ? zombie1.position.x + 'px' : 0,
+       top: zombie1 ? zombie1.position.y + cacheMove.y + yTranslation + 'px' : 0,
+       left: zombie1 ? zombie1.position.x + cacheMove.x + 'px' : 0,
        }"></div>
 </template>
 
 <script>
-  import {mapMutations} from 'vuex';
+  import { mapMutations } from 'vuex';
 
   export default {
     name: "zombie1",
@@ -27,37 +27,48 @@
         isWalk: true,
         direction: 'left',
         zombie1Index: 0,
+        cacheMove: { x: 0, y: 0 } // для уменьшения количества запросов к стору
       }
     },
     computed: {
       zombie1() {
-        return this.$store.state.vueGame.zombie1List[this.zombie1Index];
+        return this.$store.state.vueGame.zombie1List[ this.zombie1Index ];
       },
       yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
       },
-      mapWidth(){
+      mapWidth() {
         return this.$store.state.vueGame.gameMap.size.width;
       }
     },
     methods: {
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
-          if (this.zombie1.position.x < -200 || this.zombie1.position.x > this.mapWidth + 200){
+          if (this.zombie1.position.x < -200 || this.zombie1.position.x > this.mapWidth + 200) { // уничтожение зомби после выхода с карты
             this.isDead = true;
             this.zombie1Del(this.zombie1Index);
-          }else {
-            this.zombie1MoveX(
-              (this.direction === 'left') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
-              this.zombie1.index
-            );
+          } else {
+              (this.direction === 'left') ?
+                this.cacheMove.x -= this.zombie1.parameters.speed :
+                this.cacheMove.x += this.zombie1.parameters.speed;
           }
         } else if (this.direction === 'up' || this.direction === 'down') {
-          this.zombie1MoveX(
-            (this.direction === 'up') ? -this.zombie1.parameters.speed : this.zombie1.parameters.speed,
-            this.zombie1.index
-          );
+          (this.direction === 'up') ?
+            this.cacheMove.y -= this.zombie1.parameters.speed :
+            this.cacheMove.y += this.zombie1.parameters.speed;
         }
+      },
+      cachingMoveRequests(){
+        setInterval(()=>{
+          if(this.cacheMove.x || this.cacheMove.y) {
+            this.zombie1Move(
+              this.cacheMove,
+              this.zombie1.index
+            );
+            this.cacheMove.x = 0;
+            this.cacheMove.y = 0;
+          }
+        }, 200);
       },
       initZombie(i) {
         class Zombie1 {
@@ -85,8 +96,7 @@
       },
       ...mapMutations({
         addZombie1: 'vueGame/addZombie1',
-        zombie1MoveX: 'vueGame/zombie1MoveX',
-        zombie1MoveY: 'vueGame/zombie1MoveY',
+        zombie1Move: 'vueGame/zombie1Move',
         zombie1Del: 'vueGame/zombie1Del',
       })
     },
@@ -95,7 +105,8 @@
       this.zombie1Index = this.$store.state.vueGame.zombie1List.length;
       this.addZombie1(this.initZombie(this.zombie1Index));
 
-      // включаем анимацию
+      // включаем анимацию и кэш для уменьшения количества запросов в стор
+      this.cachingMoveRequests();
       const animate = highResTimestamp => {
         requestAnimationFrame(animate);
         if (this.isWalk && !this.isDead) {
