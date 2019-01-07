@@ -76,7 +76,7 @@
         if (this.direction === 'left' || this.direction === 'right') {
           let deltaMod = (this.direction === 'left') ? -this.hero.parameters.speed : this.hero.parameters.speed;
           let newCacheVal = this.hero.position.x + this.cacheMove.x + deltaMod;
-          if (newCacheVal < 0 || newCacheVal > this.mapWidth - this.hero.size.width*1.5) deltaMod = 0;
+          if (newCacheVal < 0 || newCacheVal > this.mapWidth - this.hero.size.width) deltaMod = 0;
 
           this.cacheMove.x += deltaMod;
 

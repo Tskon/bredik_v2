@@ -55,11 +55,7 @@ export const state = () => ({
 
 export const mutations = {
   heroMove(state, delta) {
-    let newPos = state.hero.position.x += delta.x;
-    if (newPos < 0) newPos = 0;
-    const lastXPoint = state.gameMap.size.width - state.hero.size.width - 4;
-    if (newPos > lastXPoint) newPos = lastXPoint;
-    state.hero.position.x = newPos;
+    state.hero.position.x += delta.x;
   },
   yTranslationChange(state, delta) {
     state.gameMap.yTranslation -= delta;
