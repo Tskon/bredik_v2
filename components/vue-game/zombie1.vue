@@ -48,9 +48,9 @@
             this.isDead = true;
             this.zombie1Del(this.zombie1Index);
           } else {
-              (this.direction === 'left') ?
-                this.cacheMove.x -= this.zombie1.parameters.speed :
-                this.cacheMove.x += this.zombie1.parameters.speed;
+            (this.direction === 'left') ?
+              this.cacheMove.x -= this.zombie1.parameters.speed :
+              this.cacheMove.x += this.zombie1.parameters.speed;
           }
         } else if (this.direction === 'up' || this.direction === 'down') {
           (this.direction === 'up') ?
@@ -58,17 +58,18 @@
             this.cacheMove.y += this.zombie1.parameters.speed;
         }
       },
-      cachingMoveRequests(){
-        setInterval(()=>{
-          if(this.cacheMove.x || this.cacheMove.y) {
-            this.zombie1Move(
-              this.cacheMove,
-              this.zombie1.index
-            );
-            this.cacheMove.x = 0;
-            this.cacheMove.y = 0;
-          }
-        }, 200);
+      cachingMoveRequests() {
+        const index =
+          setInterval(() => {
+            if (this.cacheMove.x || this.cacheMove.y) {
+              this.zombie1Move({
+                delta: this.cacheMove,
+                index: this.zombie1.index
+              });
+              this.cacheMove.x = 0;
+              this.cacheMove.y = 0;
+            }
+          }, 200);
       },
       initZombie(i) {
         class Zombie1 {
