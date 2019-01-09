@@ -38,13 +38,48 @@ export const state = () => ({
 });
 
 export const mutations = {
+  hitGridAddObject(state, data){
+    const testData = {
+      x:253,
+      y:1631,
+      width: 60,
+      height: 60,
+      callback: ()=>{console.log('=== test object callback ===')}
+    };
+    data = testData;
+
+    const parsedY = parseNumber(data.y);
+    const parsedX = parseNumber(data.x);
+
+    if (state.gameMap.hitGrid[data.y.hundred] && state.gameMap.hitGrid[data.y.hundred][data.y.decimal] &&
+        state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred] &&
+        state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]){
+
+      console.log('Координата занята')
+
+    } else {
+      if (!state.gameMap.hitGrid.hasOwnProperty(data.y.hundred)) state.gameMap.hitGrid[data.y.hundred] = {};
+      if (!state.gameMap.hitGrid[data.y.hundred].hasOwnProperty(data.y.decimal)) state.gameMap.hitGrid[data.y.hundred][data.y.decimal] = {};
+      if (!state.gameMap.hitGrid[data.y.hundred][data.y.decimal].hasOwnProperty(data.x.hundred)) state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred] = {};
+
+      state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal] = 'testStr';
+    }
+
+
+    console.log(state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]);
+
+    function parseNumber(num){
+      const hundred = Math.floor(num / 100) * 100;
+      const decimal = Math.floor((num - hundred) / 10) * 10;
+      return { hundred, decimal}
+    }
+  },
   heroMove(state, delta) {
     state.hero.position.x += delta.x;
   },
   yTranslationChange(state, delta) {
     state.gameMap.yTranslation -= delta;
   },
-
   addZombie1(state, zombie) {
     state.zombie1List.push(zombie);
   },

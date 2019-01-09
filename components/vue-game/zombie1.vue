@@ -24,7 +24,7 @@
       return {
         isSpawn: false,
         isDead: false,
-        isWalk: true,
+        isWalk: false,
         direction: 'down',
         zombie1Index: 0,
         cacheMove: { x: 0, y: 0 } // для уменьшения количества запросов к стору
