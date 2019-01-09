@@ -71,6 +71,9 @@
                     this.isWalk = false;
                 }
             },
+            collisionCallback(){
+                console.log('hero callback!')
+            },
             move() {
                 if (this.direction === 'left' || this.direction === 'right') {
                     let deltaMod = (this.direction === 'left') ? -this.hero.parameters.speed : this.hero.parameters.speed;
@@ -97,6 +100,7 @@
                             y: this.hero.position.y,
                             width: this.hero.size.width,
                             height: this.hero.size.height,
+                            callback: this.collisionCallback,
                         });
                     }
                 }, 200);

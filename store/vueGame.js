@@ -46,27 +46,29 @@ export const mutations = {
       height: 60,
       callback: ()=>{console.log('=== test object callback ===')}
     };
-    data = testData;
+    // data = testData;
 
     const parsedY = parseNumber(data.y);
     const parsedX = parseNumber(data.x);
 
-    if (state.gameMap.hitGrid[data.y.hundred] && state.gameMap.hitGrid[data.y.hundred][data.y.decimal] &&
-        state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred] &&
-        state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]){
+    if (state.gameMap.hitGrid[parsedY.hundred] && state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal] &&
+        state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred] &&
+        state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred][parsedX.decimal]){
 
-      console.log('Координата занята')
+      if(typeof data.callback === 'function'){
+        data.callback();
+      }
 
     } else {
-      if (!state.gameMap.hitGrid.hasOwnProperty(data.y.hundred)) state.gameMap.hitGrid[data.y.hundred] = {};
-      if (!state.gameMap.hitGrid[data.y.hundred].hasOwnProperty(data.y.decimal)) state.gameMap.hitGrid[data.y.hundred][data.y.decimal] = {};
-      if (!state.gameMap.hitGrid[data.y.hundred][data.y.decimal].hasOwnProperty(data.x.hundred)) state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred] = {};
+      if (!state.gameMap.hitGrid.hasOwnProperty(parsedY.hundred)) state.gameMap.hitGrid[parsedY.hundred] = {};
+      if (!state.gameMap.hitGrid[parsedY.hundred].hasOwnProperty(parsedY.decimal)) state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal] = {};
+      if (!state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal].hasOwnProperty(parsedX.hundred)) state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred] = {};
 
-      state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal] = 'testStr';
+      state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred][parsedX.decimal] = 'testStr';
     }
 
 
-    console.log(state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]);
+    // console.log(state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]);
 
     function parseNumber(num){
       const hundred = Math.floor(num / 100) * 100;
