@@ -28,10 +28,10 @@
         isShoot: false,
         direction: 'up',
         directionCodes: {
-          'left': 37,
-          'up': 38,
-          'right': 39,
-          'down': 40,
+          'left': 'ArrowLeft',
+          'up': 'ArrowUp',
+          'right': 'ArrowRight',
+          'down': 'ArrowUp',
         },
         cacheMove: { x: 0, y: 0 }, // для уменьшения количества запросов к стору
       }
@@ -46,21 +46,20 @@
     },
     methods: {
       keyDownHandler(e) {
-        //  37 left, 38 up, 39 right, 40 down
-        if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+        if (e.code === 'ArrowLeft' || e.code === 'ArrowUp' || e.code === 'ArrowRight' || e.code === 'ArrowDown') {
           e.preventDefault();
           this.isWalk = true;
 
-          if (e.keyCode === 37) {
+          if (e.code === 'ArrowLeft') {
             this.direction = 'left';
           }
-          if (e.keyCode === 38) {
+          if (e.code === 'ArrowUp') {
             this.direction = 'up';
           }
-          if (e.keyCode === 39) {
+          if (e.code === 'ArrowRight') {
             this.direction = 'right';
           }
-          if (e.keyCode === 40) {
+          if (e.code === 'ArrowDown') {
             this.direction = 'down';
           }
 
