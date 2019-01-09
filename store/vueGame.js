@@ -41,15 +41,15 @@ export const mutations = {
   hitGridAddObject(state, data){
     const testData = {
       x:253,
-      y:1631,
+      y:-1631,
       width: 60,
       height: 60,
       callback: ()=>{console.log('=== test object callback ===')}
     };
     // data = testData;
 
-    const parsedY = parseNumber(data.y);
-    const parsedX = parseNumber(data.x);
+    const parsedY = parseNumber(data.y, 'y');
+    const parsedX = parseNumber(data.x, 'x');
 
     if (state.gameMap.hitGrid[parsedY.hundred] && state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal] &&
         state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred] &&
@@ -70,10 +70,10 @@ export const mutations = {
 
     // console.log(state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]);
 
-    function parseNumber(num){
-      const hundred = Math.floor(num / 100) * 100;
-      const decimal = Math.floor((num - hundred) / 10) * 10;
-      return { hundred, decimal}
+    function parseNumber(num, prefix){
+      const hundred = (num < 0) ? Math.ceil(num / 100) * 100 : Math.floor(num / 100) * 100;
+      const decimal = prefix + (num < 0) ? Math.ceil((num - hundred) / 10) * 10 : Math.floor((num - hundred) / 10) * 10;
+      return { hundred: prefix + hundred, decimal: prefix + decimal}
     }
   },
   heroMove(state, delta) {
