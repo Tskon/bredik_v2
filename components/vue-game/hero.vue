@@ -123,6 +123,7 @@
   .hero {
     position: absolute;
     background-size: cover;
+    z-index: 10;
   }
 
   .hero_stay {
