@@ -7,7 +7,8 @@ export const state = () => ({
       width: 900,
       height: 600
     },
-    yTranslation: 0
+    yTranslation: 0,
+    hitGrid: {} // y100 { y10:{ x100: { x10: { data + callback } } } }
   },
 
   hero: {
@@ -32,6 +33,8 @@ export const state = () => ({
   },
 
   zombie1List: [],
+
+
 });
 
 export const mutations = {
