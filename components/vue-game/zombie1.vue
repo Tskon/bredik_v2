@@ -58,6 +58,9 @@
             this.cacheMove.y += this.zombie1.parameters.speed;
         }
       },
+      collisionCallback() {
+        console.log('zombie1');
+      },
       cachingMoveRequests() {
         const index =
           setInterval(() => {
@@ -68,6 +71,14 @@
               });
               this.cacheMove.x = 0;
               this.cacheMove.y = 0;
+              this.hitGridAddObject({
+                x: this.zombie1.position.x,
+                y: this.zombie1.position.y,
+                width: this.zombie1.size.width,
+                height: this.zombie1.size.height,
+                callback: this.collisionCallback,
+                self: this.zombie1
+              });
             }
           }, 200);
       },
@@ -99,6 +110,7 @@
         addZombie1: 'vueGame/addZombie1',
         zombie1Move: 'vueGame/zombie1Move',
         zombie1Del: 'vueGame/zombie1Del',
+        hitGridAddObject: 'vueGame/hitGridAddObject',
       })
     },
     mounted() {
@@ -115,6 +127,16 @@
         }
       };
       requestAnimationFrame(animate);
+
+      // добавляем позицию зомби на карту
+      this.hitGridAddObject({
+        x: this.zombie1.position.x,
+        y: this.zombie1.position.y,
+        width: this.zombie1.size.width,
+        height: this.zombie1.size.height,
+        callback: this.collisionCallback,
+        self: this.zombie1
+      });
     }
 
   }

@@ -95,12 +95,15 @@
                             this.cacheMove
                         );
                         this.cacheMove.x = 0;
+                    }
+                    if(this.cacheMove.x || this.isWalk){
                         this.hitGridAddObject({
                             x: this.hero.position.x,
-                            y: this.hero.position.y,
+                            y: this.hero.position.y - this.$store.state.vueGame.gameMap.yTranslation,
                             width: this.hero.size.width,
                             height: this.hero.size.height,
                             callback: this.collisionCallback,
+                            self: this.hero
                         });
                     }
                 }, 200);
@@ -124,6 +127,16 @@
                 }
             };
             requestAnimationFrame(animate);
+
+            // добавляем позицию героя на карту
+            this.hitGridAddObject({
+                x: this.hero.position.x,
+                y: this.hero.position.y + this.$store.state.vueGame.gameMap.yTranslation,
+                width: this.hero.size.width,
+                height: this.hero.size.height,
+                callback: this.collisionCallback,
+                self: this.hero
+            });
         }
 
     }
