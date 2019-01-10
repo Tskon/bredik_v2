@@ -39,16 +39,7 @@ export const state = () => ({
 
 export const mutations = {
     hitGridAddObject(state, data) {
-        const testData = {
-            x: 253,
-            y: -1631,
-            width: 60,
-            height: 60,
-            callback: () => {
-                console.log('=== test object callback ===')
-            }
-        };
-        // data = testData;
+        // TODO добавить метод для удаления записей и метод для заполнения записей по всему размеру объекта
 
         const parsedY = parseNumber(data.y, 'y');
         const parsedX = parseNumber(data.x, 'x');
