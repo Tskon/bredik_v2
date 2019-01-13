@@ -1,99 +1,107 @@
 export const state = () => ({
-    // карта координат. Хранит диапазоны координат и колбеки
-    xyMap: {},
+  // карта координат. Хранит диапазоны координат и колбеки
+  xyMap: {},
 
-    gameMap: {
-        size: {
-            width: 900,
-            height: 600
-        },
-        yTranslation: 0,
-        hitGrid: {} // y100 { y10:{ x100: { x10: { data + callback } } } }
+  gameMap: {
+    size: {
+      width: 900,
+      height: 600
     },
+    yTranslation: 0,
+    hitGrid: {} // y100 { y10:{ x100: { x10: { data + callback } } } }
+  },
 
-    hero: {
-        immortal: false,
-        size: {
-            width: 80,
-            height: 80,
-        },
-        position: {
-            x: 410,
-            y: 400,
-        },
-        ammo: {
-            m4a1: false,
-            shotgun: false
-        },
-        parameters: {
-            hp: 100,
-            armor: 50,
-            speed: 5,
-        }
+  hero: {
+    immortal: false,
+    size: {
+      width: 80,
+      height: 80,
     },
+    position: {
+      x: 410,
+      y: 400,
+    },
+    ammo: {
+      m4a1: false,
+      shotgun: false
+    },
+    parameters: {
+      hp: 100,
+      armor: 50,
+      speed: 5,
+    }
+  },
 
-    zombie1List: [],
+  zombie1List: [],
 
 
 });
 
 export const mutations = {
-    hitGridAddObject(state, data) {
-        // TODO добавить метод для удаления записей и метод для заполнения записей по всему размеру объекта
+  hitGridAddObject(state, data) {
+    // TODO добавить метод для удаления записей и доработать метод заполнение объекта (пока не срабатывает по циклам)
 
-        const parsedY = parseNumber(data.y, 'y');
-        const parsedX = parseNumber(data.x, 'x');
+    const width = data.width;
+    const height = data.height;
 
-        if (state.gameMap.hitGrid[parsedY.hundred] && state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal] &&
-            state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred] &&
-            state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred][parsedX.decimal]) {
+    // цикл для заполнения положения объекта в сетку на карте. Заполняется кратно 10 пикселям
+    for (let y = 0; y < height / 10; y += 10) {
+      for (let x = 0; x < width / 10; x += 10) {
+        fillIteration(x, y);
+      }
+    }
 
-            const hitGridObj = state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred][parsedX.decimal];
+    function fillIteration(x, y) {
+      const parsedY = parseNumber(data.y + y, 'y');
+      const parsedX = parseNumber(data.x + x, 'x');
 
-            if (typeof data.callback === 'function') {
-                data.callback();
-                // console.log(data.callback === hitGridObj.callback) // true
-            }
-            if (typeof hitGridObj.callback === 'function') {
-                hitGridObj.callback();
-            }
-            console.log(hitGridObj.object)
+      if (state.gameMap.hitGrid[ parsedY.hundred ] && state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] &&
+        state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] &&
+        state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ]) {
 
-        } else {
-            if (!state.gameMap.hitGrid.hasOwnProperty(parsedY.hundred)) state.gameMap.hitGrid[parsedY.hundred] = {};
-            if (!state.gameMap.hitGrid[parsedY.hundred].hasOwnProperty(parsedY.decimal)) state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal] = {};
-            if (!state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal].hasOwnProperty(parsedX.hundred)) state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred] = {};
+        const hitGridObj = state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ];
 
-            state.gameMap.hitGrid[parsedY.hundred][parsedY.decimal][parsedX.hundred][parsedX.decimal] = {
-                object: data.self,
-                callback: (typeof data.callback === 'function') ? data.callback : () => {
-                }
-            };
+        if (typeof data.callback === 'function') {
+          data.callback();
         }
-
-
-        // console.log(state.gameMap.hitGrid[data.y.hundred][data.y.decimal][data.x.hundred][data.x.decimal]);
-
-        function parseNumber(num, prefix) {
-            const hundred = (num < 0) ? Math.ceil(num / 100) * 100 : Math.floor(num / 100) * 100;
-            const decimal = prefix + (num < 0) ? Math.ceil((num - hundred) / 10) * 10 : Math.floor((num - hundred) / 10) * 10;
-            return {hundred: prefix + hundred, decimal: prefix + decimal}
+        if (typeof hitGridObj.callback === 'function') {
+          hitGridObj.callback();
         }
-    },
-    heroMove(state, delta) {
-        state.hero.position.x += delta.x;
-    },
-    yTranslationChange(state, delta) {
-        state.gameMap.yTranslation -= delta;
-    },
-    addZombie1(state, zombie) {
-        state.zombie1List.push(zombie);
-    },
-    zombie1Move(state, data) {
-        if (data.delta.x) state.zombie1List[data.index].position.x += data.delta.x;
-        if (data.delta.y) state.zombie1List[data.index].position.y += data.delta.y;
-    },
-    zombie1Del(state, i) {
-        state.zombie1List[i] = null;
-    },
+        console.log(hitGridObj.object)
+
+      } else {
+        if (!state.gameMap.hitGrid.hasOwnProperty(parsedY.hundred)) state.gameMap.hitGrid[ parsedY.hundred ] = {};
+        if (!state.gameMap.hitGrid[ parsedY.hundred ].hasOwnProperty(parsedY.decimal)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] = {};
+        if (!state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ].hasOwnProperty(parsedX.hundred)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
+
+        state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ] = {
+          object: data.self,
+          callback: (typeof data.callback === 'function') ? data.callback : () => {
+          }
+        };
+      }
+    }
+
+    function parseNumber(num, prefix) {
+      const hundred = (num < 0) ? Math.ceil(num / 100) * 100 : Math.floor(num / 100) * 100;
+      const decimal = prefix + (num < 0) ? Math.ceil((num - hundred) / 10) * 10 : Math.floor((num - hundred) / 10) * 10;
+      return { hundred: prefix + hundred, decimal: prefix + decimal }
+    }
+  },
+  heroMove(state, delta) {
+    state.hero.position.x += delta.x;
+  },
+  yTranslationChange(state, delta) {
+    state.gameMap.yTranslation -= delta;
+  },
+  addZombie1(state, zombie) {
+    state.zombie1List.push(zombie);
+  },
+  zombie1Move(state, data) {
+    if (data.delta.x) state.zombie1List[ data.index ].position.x += data.delta.x;
+    if (data.delta.y) state.zombie1List[ data.index ].position.y += data.delta.y;
+  },
+  zombie1Del(state, i) {
+    state.zombie1List[ i ] = null;
+  },
 };
