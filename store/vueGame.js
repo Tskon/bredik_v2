@@ -39,36 +39,41 @@ export const state = () => ({
 
 export const mutations = {
   hitGridAddObject(state, data) {
-    // TODO добавить метод для удаления записей и доработать метод заполнение объекта (пока не срабатывает по циклам)
 
     const width = data.width;
     const height = data.height;
 
     // цикл для заполнения положения объекта в сетку на карте. Заполняется кратно 10 пикселям
-    for (let y = 0; y < height / 10; y += 10) {
-      for (let x = 0; x < width / 10; x += 10) {
+    for (let y = 0; y < height; y += 10) {
+      for (let x = 0; x < width; x += 10) {
         fillIteration(x, y);
       }
     }
 
-    function fillIteration(x, y) {
+    function fillIteration(x, y, clear = false) {
       const parsedY = parseNumber(data.y + y, 'y');
       const parsedX = parseNumber(data.x + x, 'x');
 
+      // Если запись не пустая
       if (state.gameMap.hitGrid[ parsedY.hundred ] && state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] &&
         state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] &&
         state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ]) {
 
         const hitGridObj = state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ];
 
-        if (typeof data.callback === 'function') {
-          data.callback();
+        if (!clear){ // когда не надо очищать поле
+          if (typeof data.callback === 'function') {
+            data.callback();
+          }
+          if (typeof hitGridObj.callback === 'function') {
+            hitGridObj.callback();
+          }
+        } else { // когда надо очищать поле
+          state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
         }
-        if (typeof hitGridObj.callback === 'function') {
-          hitGridObj.callback();
-        }
-        console.log(hitGridObj.object)
 
+
+        // Если не ничего записано
       } else {
         if (!state.gameMap.hitGrid.hasOwnProperty(parsedY.hundred)) state.gameMap.hitGrid[ parsedY.hundred ] = {};
         if (!state.gameMap.hitGrid[ parsedY.hundred ].hasOwnProperty(parsedY.decimal)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] = {};
