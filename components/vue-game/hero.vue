@@ -71,7 +71,7 @@
           this.isWalk = false;
         }
       },
-      collisionCallback(options) {
+      collisionCallback(options = {}) {
         // в коллбэк должен прокидываться дамаг и прочие зависимости
         console.log('hero callback!')
         const dmg = options.dmg || 0;
@@ -93,12 +93,18 @@
       },
       cachingMoveRequests() {
         setInterval(() => {
+          // очистка предыдущего положения на карте
+          if (this.cacheMove.x || this.isWalk) {
+            this.hitGridAddObject({...this.getObjectForHitMap(), isNeedClear: true});
+          }
+
+          // передача кэша в стор
           if (this.cacheMove.x) {
-            this.heroMove(
-              this.cacheMove
-            );
+            this.heroMove(this.cacheMove);
             this.cacheMove.x = 0;
           }
+
+          // запись нового положения на карту
           if (this.cacheMove.x || this.isWalk) {
             this.hitGridAddObject(this.getObjectForHitMap());
           }

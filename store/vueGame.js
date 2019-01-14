@@ -46,7 +46,7 @@ export const mutations = {
     // цикл для заполнения положения объекта в сетку на карте. Заполняется кратно 10 пикселям
     for (let y = 0; y < height; y += 10) {
       for (let x = 0; x < width; x += 10) {
-        fillIteration(x, y);
+        fillIteration(x, y, data.isNeedClear || false);
       }
     }
 
@@ -69,6 +69,7 @@ export const mutations = {
             hitGridObj.callback();
           }
         } else { // когда надо очищать поле
+          console.log('==================clear================', x, y)
           state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
         }
 
@@ -93,19 +94,24 @@ export const mutations = {
       return { hundred: prefix + hundred, decimal: prefix + decimal }
     }
   },
+
   heroMove(state, delta) {
     state.hero.position.x += delta.x;
   },
+
   yTranslationChange(state, delta) {
     state.gameMap.yTranslation -= delta;
   },
+
   addZombie1(state, zombie) {
     state.zombie1List.push(zombie);
   },
+
   zombie1Move(state, data) {
     if (data.delta.x) state.zombie1List[ data.index ].position.x += data.delta.x;
     if (data.delta.y) state.zombie1List[ data.index ].position.y += data.delta.y;
   },
+
   zombie1Del(state, i) {
     state.zombie1List[ i ] = null;
   },
