@@ -69,7 +69,6 @@ export const mutations = {
             hitGridObj.callback();
           }
         } else { // когда надо очищать поле
-          console.log('==================clear================', x, y)
           state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
         }
 
