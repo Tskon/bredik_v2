@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex';
+  import {mapMutations} from 'vuex';
 
   export default {
     name: "zombie1",
@@ -61,9 +61,24 @@
       collisionCallback() {
         console.log('zombie1');
       },
+      getObjectForHitMap(){
+        return {
+          x: this.zombie1.position.x,
+          y: this.zombie1.position.y,
+          width: this.zombie1.size.width,
+          height: this.zombie1.size.height,
+          callback: this.collisionCallback,
+          self: this.zombie1
+        }
+      },
       cachingMoveRequests() {
         const index =
           setInterval(() => {
+            // очистка предыдущего положения на карте
+            if (this.cacheMove.x || this.isWalk) {
+              this.hitGridAddObject({...this.getObjectForHitMap(), isNeedClear: true});
+            }
+
             if (this.cacheMove.x || this.cacheMove.y) {
               this.zombie1Move({
                 delta: this.cacheMove,
@@ -71,14 +86,7 @@
               });
               this.cacheMove.x = 0;
               this.cacheMove.y = 0;
-              this.hitGridAddObject({
-                x: this.zombie1.position.x,
-                y: this.zombie1.position.y,
-                width: this.zombie1.size.width,
-                height: this.zombie1.size.height,
-                callback: this.collisionCallback,
-                self: this.zombie1
-              });
+              this.hitGridAddObject(this.getObjectForHitMap());
             }
           }, 200);
       },
