@@ -75,7 +75,7 @@ export const mutations = {
 
 
         // Если не ничего записано
-      } else {
+      } else if(!clear) {
         if (!state.gameMap.hitGrid.hasOwnProperty(parsedY.hundred)) state.gameMap.hitGrid[ parsedY.hundred ] = {};
         if (!state.gameMap.hitGrid[ parsedY.hundred ].hasOwnProperty(parsedY.decimal)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] = {};
         if (!state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ].hasOwnProperty(parsedX.hundred)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
@@ -87,7 +87,6 @@ export const mutations = {
         };
       }
     }
-
     function parseNumber(num, prefix) {
       const hundred = (num < 0) ? Math.ceil(num / 100) * 100 : Math.floor(num / 100) * 100;
       const decimal = prefix + (num < 0) ? Math.ceil((num - hundred) / 10) * 10 : Math.floor((num - hundred) / 10) * 10;
