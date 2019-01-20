@@ -132,7 +132,7 @@
             // проверка на коллизии
             const closedDirections = [];
             this.collisions.forEach(collision=>{
-              closedDirections.push(collision.closeDirection);
+              closedDirections.push(collision.collisionFrom);
             });
             if(!closedDirections.includes(this.direction)){
               this.move();

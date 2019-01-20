@@ -18,6 +18,7 @@
 
 <script>
   import { mapMutations } from 'vuex';
+  import { getCollisionObject } from './js/helper';
 
   export default {
     name: "zombie1",
@@ -29,7 +30,8 @@
         isFight: false,
         direction: 'down',
         zombie1Index: 0,
-        cacheMove: { x: 0, y: 0 } // для уменьшения количества запросов к стору
+        cacheMove: { x: 0, y: 0 }, // для уменьшения количества запросов к стору
+        collisions: [],
       }
     },
     computed: {
@@ -140,6 +142,19 @@
         if (this.isWalk && !this.isDead) {
           this.move();
         }
+        this.collisions = getCollisionObject({
+          object: this.zombie1,
+          targetTranslationY: this.$store.state.vueGame.gameMap.yTranslation,
+          targets: [this.$store.state.vueGame.hero]
+        });
+
+        if(this.collisions.length){
+          this.direction = this.collisions[0].collisionFrom;
+          this.isFight = true;
+        } else {
+          this.isFight = false;
+        }
+
       };
       requestAnimationFrame(animate);
     }
