@@ -9,10 +9,10 @@
        zombie_down: direction === 'down',
        }"
        :style="{
-       width: zombie1 ? zombie1.size.width + 'px' : 0,
-       height: zombie1 ? zombie1.size.height + 'px' : 0,
-       top: zombie1 ? zombie1.position.y + cacheMove.y + yTranslation + 'px' : 0,
-       left: zombie1 ? zombie1.position.x + cacheMove.x + 'px' : 0,
+       width: zombie1 ? zombie1.size.width + 40 + 'px' : 0,
+       height: zombie1 ? zombie1.size.height + 40 + 'px' : 0,
+       top: zombie1 ? (zombie1.position.y + cacheMove.y - 0 + 20) + yTranslation + 'px' : 0,
+       left: zombie1 ? zombie1.position.x + cacheMove.x - 20 + 'px' : 0,
        }"></div>
 </template>
 
@@ -43,6 +43,16 @@
         return this.$store.state.vueGame.gameMap.size.width;
       }
     },
+    props: {
+      startX: {
+        default: 0,
+        type: String
+      },
+      startY: {
+        default: 0,
+        type: String
+      }
+    },
     methods: {
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
@@ -61,7 +71,7 @@
         }
       },
       collisionCallback(options = {}) {
-        console.log('zombie1');
+        // console.log('zombie1');
         this.isFight = true;
         setTimeout(()=>{this.isFight = false;}, 3000);
 
@@ -95,29 +105,26 @@
             }
           }, 200);
       },
-      initZombie(i) {
+      initZombie(i, startX, startY) {
         class Zombie1 {
-          constructor(index) {
+          constructor(index, startX, startY) {
             this.immortal = false;
             this.index = index; // номер в массиве зомби во vuex
             this.size = {
               width: 80,
-              height:
-                80,
+              height: 80,
             };
             this.position = {
-              x: 410,
-              y:
-                100,
+              x: startX,
+              y: startY,
             };
             this.parameters = {
               hp: 100,
-              speed:
-                1,
+              speed: 1,
             }
           }
         };
-        return new Zombie1(i);
+        return new Zombie1(i, startX, startY);
       },
       ...mapMutations({
         addZombie1: 'vueGame/addZombie1',
@@ -129,7 +136,7 @@
     mounted() {
       // добавляем экзкмпляр в массив в сторе
       this.zombie1Index = this.$store.state.vueGame.zombie1List.length;
-      this.addZombie1(this.initZombie(this.zombie1Index));
+      this.addZombie1(this.initZombie(this.zombie1Index, this.startX, this.startY));
 
       // включаем анимацию и кэш для уменьшения количества запросов в стор
       this.cachingMoveRequests();
@@ -169,19 +176,20 @@
 
   .zombie_stay {
     background: url("/vue-game/sprites/zombie1_stay1.gif") no-repeat;
-    background-size: 65%;
+    background-size: 50%;
     background-position: center;
   }
 
   .zombie_walk {
     background: url("/vue-game/sprites/zombie1_walk2.gif") no-repeat;
     background-position: center;
-    background-size: 100%;
+    background-size: 85%;
   }
 
   .zombie_fight{
     background: url("/vue-game/sprites/zombie1_attack1.gif") no-repeat;
-    background-position: center;
+    background-position-y: center;
+    background-position-x: 20px;
     background-size: 100%;
   }
 
