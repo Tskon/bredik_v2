@@ -9,10 +9,10 @@
        zombie_down: direction === 'down',
        }"
        :style="{
-       width: zombie1 ? zombie1.size.width + 40 + 'px' : 0,
-       height: zombie1 ? zombie1.size.height + 40 + 'px' : 0,
-       top: zombie1 ? (zombie1.position.y + cacheMove.y - 0 + 20) + yTranslation + 'px' : 0,
-       left: zombie1 ? zombie1.position.x + cacheMove.x - 20 + 'px' : 0,
+       width: zombie1 ? zombie1.size.width + 'px' : 0,
+       height: zombie1 ? zombie1.size.height + 'px' : 0,
+       top: zombie1 ? zombie1.position.y + cacheMove.y + yTranslation + 'px' : 0,
+       left: zombie1 ? zombie1.position.x + cacheMove.x + 'px' : 0,
        }"></div>
 </template>
 
@@ -26,7 +26,7 @@
         isSpawn: false,
         isDead: false,
         isWalk: false,
-        isFight: true,
+        isFight: false,
         direction: 'down',
         zombie1Index: 0,
         cacheMove: { x: 0, y: 0 } // для уменьшения количества запросов к стору
@@ -106,8 +106,8 @@
             this.immortal = false;
             this.index = index; // номер в массиве зомби во vuex
             this.size = {
-              width: 80,
-              height: 80,
+              width: 60,
+              height: 60,
             };
             this.position = {
               x: +startX,
@@ -151,6 +151,8 @@
   .zombie {
     position: absolute;
     background-size: cover;
+    box-sizing: content-box;
+    padding: 30px;
   }
 
   .zombie_spawn {
