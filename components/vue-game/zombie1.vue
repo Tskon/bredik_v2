@@ -110,8 +110,8 @@
               height: 80,
             };
             this.position = {
-              x: startX,
-              y: startY,
+              x: +startX,
+              y: +startY,
             };
             this.parameters = {
               hp: 100,
