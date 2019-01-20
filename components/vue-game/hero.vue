@@ -19,6 +19,7 @@
 
 <script>
   import { mapMutations } from 'vuex';
+  import { getCollisionObject } from './js/helper';
 
   export default {
     name: "hero",
@@ -34,6 +35,7 @@
           'down': 'ArrowUp',
         },
         cacheMove: { x: 0, y: 0 }, // для уменьшения количества запросов к стору
+        collisions: [],
       }
     },
     computed: {
@@ -123,7 +125,25 @@
       const animate = highResTimestamp => {
         requestAnimationFrame(animate);
         if (this.isWalk) {
-          this.move();
+          if (!this.collisions.length){
+            this.move();
+          } else {
+
+            // проверка на коллизии
+            const closedDirections = [];
+            this.collisions.forEach(collision=>{
+              closedDirections.push(collision.closeDirection);
+            });
+            if(!closedDirections.includes(this.direction)){
+              this.move();
+            }
+
+          }
+          this.collisions = getCollisionObject({
+            objectTranslationY: this.$store.state.vueGame.gameMap.yTranslation,
+            object: this.hero,
+            targets: [...this.$store.state.vueGame.zombie1List]
+          });
         }
       };
       requestAnimationFrame(animate);
@@ -137,6 +157,8 @@
     position: absolute;
     background-size: cover;
     z-index: 10;
+    box-sizing: content-box;
+    padding: 10px;
   }
 
   .hero_stay {
