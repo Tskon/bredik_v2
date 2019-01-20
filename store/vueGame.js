@@ -14,8 +14,8 @@ export const state = () => ({
   hero: {
     immortal: false,
     size: {
-      width: 60,
-      height: 60,
+      width: 40,
+      height: 40,
     },
     position: {
       x: 410,

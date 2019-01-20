@@ -158,7 +158,7 @@
     background-size: cover;
     z-index: 10;
     box-sizing: content-box;
-    padding: 10px;
+    padding: 20px;
   }
 
   .hero_stay {
