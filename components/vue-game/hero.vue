@@ -75,7 +75,6 @@
         // в коллбэк должен прокидываться дамаг и прочие зависимости
         console.log('hero callback!')
         const dmg = options.dmg || 0;
-
       },
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
@@ -93,24 +92,14 @@
       },
       cachingMoveRequests() {
         setInterval(() => {
-          // очистка предыдущего положения на карте
-          if (this.cacheMove.x || this.isWalk) {
-            this.hitGridAddObject({...this.getObjectForHitMap(), isNeedClear: true});
-          }
-
           // передача кэша в стор
           if (this.cacheMove.x) {
             this.heroMove(this.cacheMove);
             this.cacheMove.x = 0;
           }
-
-          // запись нового положения на карту
-          if (this.cacheMove.x || this.isWalk) {
-            this.hitGridAddObject(this.getObjectForHitMap());
-          }
-        }, 200);
+        }, 50);
       },
-      getObjectForHitMap(){
+      getObjectForCollision(){
         return {
           x: this.hero.position.x,
           y: this.hero.position.y - this.$store.state.vueGame.gameMap.yTranslation,
@@ -123,7 +112,6 @@
       ...mapMutations({
         heroMove: 'vueGame/heroMove',
         yTranslationChange: 'vueGame/yTranslationChange',
-        hitGridAddObject: 'vueGame/hitGridAddObject',
       })
     },
     mounted() {
@@ -139,9 +127,6 @@
         }
       };
       requestAnimationFrame(animate);
-
-      // добавляем позицию героя на карту
-      this.hitGridAddObject(this.getObjectForHitMap());
     }
 
   }

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex';
+  import { mapMutations } from 'vuex';
 
   export default {
     name: "zombie1",
@@ -73,10 +73,12 @@
       collisionCallback(options = {}) {
         // console.log('zombie1');
         this.isFight = true;
-        setTimeout(()=>{this.isFight = false;}, 3000);
-
+        setTimeout(() => {
+          this.isFight = false;
+        }, 3000);
       },
-      getObjectForHitMap(){
+
+      getObjectForCollision() {
         return {
           x: this.zombie1.position.x,
           y: this.zombie1.position.y,
@@ -87,23 +89,16 @@
         }
       },
       cachingMoveRequests() {
-        const index =
-          setInterval(() => {
-            // очистка предыдущего положения на карте
-            if (this.cacheMove.x || this.isWalk) {
-              this.hitGridAddObject({...this.getObjectForHitMap(), isNeedClear: true});
-            }
-
-            if (this.cacheMove.x || this.cacheMove.y) {
-              this.zombie1Move({
-                delta: this.cacheMove,
-                index: this.zombie1.index
-              });
-              this.cacheMove.x = 0;
-              this.cacheMove.y = 0;
-              this.hitGridAddObject(this.getObjectForHitMap());
-            }
-          }, 200);
+        setInterval(() => {
+          if (this.cacheMove.x || this.cacheMove.y) {
+            this.zombie1Move({
+              delta: this.cacheMove,
+              index: this.zombie1.index
+            });
+            this.cacheMove.x = 0;
+            this.cacheMove.y = 0;
+          }
+        }, 50);
       },
       initZombie(i, startX, startY) {
         class Zombie1 {
@@ -147,16 +142,6 @@
         }
       };
       requestAnimationFrame(animate);
-
-      // добавляем позицию зомби на карту
-      this.hitGridAddObject({
-        x: this.zombie1.position.x,
-        y: this.zombie1.position.y,
-        width: this.zombie1.size.width,
-        height: this.zombie1.size.height,
-        callback: this.collisionCallback,
-        self: this.zombie1
-      });
     }
 
   }
@@ -186,7 +171,7 @@
     background-size: 85%;
   }
 
-  .zombie_fight{
+  .zombie_fight {
     background: url("/vue-game/sprites/zombie1_attack1.gif") no-repeat;
     background-position-y: center;
     background-position-x: 20px;

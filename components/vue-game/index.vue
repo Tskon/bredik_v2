@@ -2,8 +2,8 @@
   <main>
     <div class="game-wrapper" :style="{backgroundPositionY: yTranslation + 'px'}">
       <hero></hero>
-      <zombie1 startX="41" startY="1"></zombie1>
-      <zombie1 startX="30" startY="1"></zombie1>
+      <zombie1 startX="410" startY="100"></zombie1>
+      <zombie1 startX="300" startY="100"></zombie1>
     </div>
     <p>Спрайты и картинки от Louis Ferina</p>
   </main>
