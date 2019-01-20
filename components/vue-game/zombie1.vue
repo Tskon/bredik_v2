@@ -3,6 +3,7 @@
        :class="{
        zombie_stay: !isWalk,
        zombie_walk: isWalk,
+       zombie_fight: isFight,
        zombie_up: direction === 'up',
        zombie_left: direction === 'left',
        zombie_down: direction === 'down',
@@ -25,6 +26,7 @@
         isSpawn: false,
         isDead: false,
         isWalk: false,
+        isFight: true,
         direction: 'down',
         zombie1Index: 0,
         cacheMove: { x: 0, y: 0 } // для уменьшения количества запросов к стору
@@ -58,8 +60,11 @@
             this.cacheMove.y += this.zombie1.parameters.speed;
         }
       },
-      collisionCallback() {
+      collisionCallback(options = {}) {
         console.log('zombie1');
+        this.isFight = true;
+        setTimeout(()=>{this.isFight = false;}, 3000);
+
       },
       getObjectForHitMap(){
         return {
@@ -170,6 +175,12 @@
 
   .zombie_walk {
     background: url("/vue-game/sprites/zombie1_walk2.gif") no-repeat;
+    background-position: center;
+    background-size: 100%;
+  }
+
+  .zombie_fight{
+    background: url("/vue-game/sprites/zombie1_attack1.gif") no-repeat;
     background-position: center;
     background-size: 100%;
   }
