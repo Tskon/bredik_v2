@@ -50,6 +50,7 @@ export const mutations = {
       }
     }
 
+    // заполняет hitGrid, вызывает коллбеки объектов при коллизии
     function fillIteration(x, y, clear = false) {
       const parsedY = parseNumber(data.y + y, 'y');
       const parsedX = parseNumber(data.x + x, 'x');
@@ -63,10 +64,16 @@ export const mutations = {
 
         if (!clear){ // когда не надо очищать поле
           if (typeof data.callback === 'function') {
-            data.callback();
+            data.callback({
+              passive: false, // владелец коллбека сам взаимодействует с объектом
+              object: hitGridObj.object
+            });
           }
           if (typeof hitGridObj.callback === 'function') {
-            hitGridObj.callback();
+            hitGridObj.callback({
+              passive: true, // другой объект взаимодействует с владельцем коллбека
+              object: data.self
+            });
           }
         } else { // когда надо очищать поле
           state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
@@ -86,6 +93,7 @@ export const mutations = {
         };
       }
     }
+
     function parseNumber(num, prefix) {
       const hundred = (num < 0) ? Math.ceil(num / 100) * 100 : Math.floor(num / 100) * 100;
       const decimal = prefix + (num < 0) ? Math.ceil((num - hundred) / 10) * 10 : Math.floor((num - hundred) / 10) * 10;
