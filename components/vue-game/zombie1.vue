@@ -19,7 +19,7 @@
 <script>
   import { mapMutations } from 'vuex';
   import { getCollisionObject } from './js/helper';
-
+  // TODO сделать влияние на героя при столкновении
   export default {
     name: "zombie1",
     data() {
