@@ -38,69 +38,6 @@ export const state = () => ({
 });
 
 export const mutations = {
-  hitGridAddObject(state, data) {
-
-    const width = data.width;
-    const height = data.height;
-
-    // цикл для заполнения положения объекта в сетку на карте. Заполняется кратно 10 пикселям
-    for (let y = 0; y < height; y += 10) {
-      for (let x = 0; x < width; x += 10) {
-        fillIteration(x, y, data.isNeedClear || false);
-      }
-    }
-
-    // заполняет hitGrid, вызывает коллбеки объектов при коллизии
-    function fillIteration(x, y, clear = false) {
-      const parsedY = parseNumber(data.y + y, 'y');
-      const parsedX = parseNumber(data.x + x, 'x');
-
-      // Если запись не пустая
-      if (state.gameMap.hitGrid[ parsedY.hundred ] && state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] &&
-        state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] &&
-        state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ]) {
-
-        const hitGridObj = state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ];
-
-        if (!clear){ // когда не надо очищать поле
-          if (typeof data.callback === 'function') {
-            data.callback({
-              passive: false, // владелец коллбека сам взаимодействует с объектом
-              object: hitGridObj.object
-            });
-          }
-          if (typeof hitGridObj.callback === 'function') {
-            hitGridObj.callback({
-              passive: true, // другой объект взаимодействует с владельцем коллбека
-              object: data.self
-            });
-          }
-        } else { // когда надо очищать поле
-          state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
-        }
-
-
-        // Если не ничего записано
-      } else if(!clear) {
-        if (!state.gameMap.hitGrid.hasOwnProperty(parsedY.hundred)) state.gameMap.hitGrid[ parsedY.hundred ] = {};
-        if (!state.gameMap.hitGrid[ parsedY.hundred ].hasOwnProperty(parsedY.decimal)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ] = {};
-        if (!state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ].hasOwnProperty(parsedX.hundred)) state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ] = {};
-
-        state.gameMap.hitGrid[ parsedY.hundred ][ parsedY.decimal ][ parsedX.hundred ][ parsedX.decimal ] = {
-          object: data.self,
-          callback: (typeof data.callback === 'function') ? data.callback : () => {
-          }
-        };
-      }
-    }
-
-    function parseNumber(num, prefix) {
-      const hundred = (num < 0) ? Math.ceil(num / 100) * 100 : Math.floor(num / 100) * 100;
-      const decimal = prefix + (num < 0) ? Math.ceil((num - hundred) / 10) * 10 : Math.floor((num - hundred) / 10) * 10;
-      return { hundred: prefix + hundred, decimal: prefix + decimal }
-    }
-  },
-
   heroMove(state, delta) {
     state.hero.position.x += delta.x;
   },
