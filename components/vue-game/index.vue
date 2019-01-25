@@ -2,8 +2,9 @@
   <main>
     <div class="game-wrapper" :style="{backgroundPositionY: yTranslation + 'px'}">
       <hero></hero>
-      <zombie1 startX="410" startY="100"></zombie1>
-      <zombie1 startX="300" startY="100"></zombie1>
+      <template v-for="zombie1 in level1.zombie1List">
+        <zombie1 :startX="''+zombie1.x" :startY="''+zombie1.y"></zombie1>
+      </template>
       <hero-stats></hero-stats>
     </div>
     <p>Спрайты и картинки от Louis Ferina</p>
@@ -14,9 +15,15 @@
   import Hero from './hero';
   import HeroStats from './hero-stats';
   import Zombie1 from './zombie1';
+  import {levels} from './js/data';
 
   export default {
     components: { HeroStats, Hero, Zombie1},
+    data(){
+      return {
+        level1: levels.level1
+      }
+    },
     computed: {
       yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
