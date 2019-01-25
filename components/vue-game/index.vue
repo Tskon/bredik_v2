@@ -4,6 +4,7 @@
       <hero></hero>
       <zombie1 startX="410" startY="100"></zombie1>
       <zombie1 startX="300" startY="100"></zombie1>
+      <hero-stats></hero-stats>
     </div>
     <p>Спрайты и картинки от Louis Ferina</p>
   </main>
@@ -11,10 +12,11 @@
 
 <script>
   import Hero from './hero';
+  import HeroStats from './hero-stats';
   import Zombie1 from './zombie1';
 
   export default {
-    components: {Hero, Zombie1},
+    components: { HeroStats, Hero, Zombie1},
     computed: {
       yTranslation() {
         return this.$store.state.vueGame.gameMap.yTranslation;
