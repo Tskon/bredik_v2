@@ -1,7 +1,7 @@
 <template>
   <!--<div>-->
-  <div class="hero"
-       :class="{
+    <div class="hero"
+         :class="{
        hero_stay: !isWalk,
        hero_walk: isWalk,
        hero_shoot: isShoot,
@@ -9,12 +9,13 @@
        hero_right: direction === 'right',
        hero_down: direction === 'down',
        }"
-       :style="{
+         :style="{
        width: hero.size.width + 'px',
        height: hero.size.height + 'px',
        top: hero.position.y + cacheMove.y + 'px',
        left: hero.position.x + cacheMove.x + 'px',
-       }"></div>
+       }">
+    </div>
 </template>
 
 <script>
@@ -152,7 +153,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .hero {
     position: absolute;
     background-size: cover;

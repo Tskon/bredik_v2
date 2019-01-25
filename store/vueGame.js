@@ -104,6 +104,9 @@ export const mutations = {
   heroMove(state, delta) {
     state.hero.position.x += delta.x;
   },
+  hitHero(state,dmg){
+    state.hero.parameters.hp -= dmg;
+  },
 
   yTranslationChange(state, delta) {
     state.gameMap.yTranslation -= delta;

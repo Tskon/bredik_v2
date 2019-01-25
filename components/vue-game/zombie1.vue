@@ -32,6 +32,7 @@
         zombie1Index: 0,
         cacheMove: { x: 0, y: 0 }, // для уменьшения количества запросов к стору
         collisions: [],
+        hitInterval: false,
       }
     },
     computed: {
@@ -43,7 +44,7 @@
       },
       mapWidth() {
         return this.$store.state.vueGame.gameMap.size.width;
-      }
+      },
     },
     props: {
       startX: {
@@ -54,6 +55,17 @@
         default: 0,
         type: String
       }
+    },
+    watch: {
+      isFight(){
+        if(this.isFight){
+          this.hitInterval = setInterval(()=>{
+            this.hitHero(this.zombie1.parameters.attack);
+          }, 1000);
+        } else {
+          clearInterval(this.hitInterval);
+        }
+      },
     },
     methods: {
       move() {
@@ -118,6 +130,7 @@
             this.parameters = {
               hp: 100,
               speed: 1,
+              attack: 10
             }
           }
         };
@@ -128,6 +141,7 @@
         zombie1Move: 'vueGame/zombie1Move',
         zombie1Del: 'vueGame/zombie1Del',
         hitGridAddObject: 'vueGame/hitGridAddObject',
+        hitHero: 'vueGame/hitHero',
       })
     },
     mounted() {
