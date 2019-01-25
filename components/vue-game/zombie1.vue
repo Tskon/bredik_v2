@@ -19,7 +19,6 @@
 <script>
   import { mapMutations } from 'vuex';
   import { getCollisionObject } from './js/helper';
-  // TODO сделать влияние на героя при столкновении
   export default {
     name: "zombie1",
     data() {
@@ -45,6 +44,9 @@
       mapWidth() {
         return this.$store.state.vueGame.gameMap.size.width;
       },
+      enemy() {
+        return this.$store.state.vueGame.hero;
+      }
     },
     props: {
       startX: {
@@ -84,8 +86,8 @@
             this.cacheMove.y += this.zombie1.parameters.speed;
         }
       },
+
       collisionCallback(options = {}) {
-        // console.log('zombie1');
         this.isFight = true;
         setTimeout(() => {
           this.isFight = false;
@@ -102,6 +104,7 @@
           self: this.zombie1
         }
       },
+
       cachingMoveRequests() {
         setInterval(() => {
           if (this.cacheMove.x || this.cacheMove.y) {
@@ -114,6 +117,42 @@
           }
         }, 50);
       },
+
+      goToTheHero(delta = 500) {
+        const deltaX = (this.zombie1.position.x - this.enemy.position.x < 0) ?
+          this.enemy.position.x - this.zombie1.position.x :
+          this.zombie1.position.x - this.enemy.position.x;
+        const deltaY = (this.zombie1.position.y - this.enemy.position.y - this.yTranslation < 0) ?
+          this.enemy.position.y - this.yTranslation - this.zombie1.position.y :
+          this.zombie1.position.y - this.enemy.position.y - this.yTranslation;
+
+        if (deltaX < delta && deltaY < delta){
+          const width = this.zombie1.size.width + (delta * 2);
+          const height = this.zombie1.size.height + (delta * 2);
+          const x = this.zombie1.position.x - delta;
+          const y = this.zombie1.position.y - delta;
+
+
+          const collisions = getCollisionObject({
+            object: {
+              position: {x, y},
+              size: {
+                width,
+                height
+              },
+            },
+            targetTranslationY: this.$store.state.vueGame.gameMap.yTranslation,
+            targets: [this.$store.state.vueGame.hero]
+          });
+
+          this.direction = collisions[0].collisionFrom;
+          this.isWalk = true;
+
+        } else {
+          this.isWalk = false;
+        }
+      },
+
       initZombie(i, startX, startY) {
         class Zombie1 {
           constructor(index, startX, startY) {
@@ -136,11 +175,11 @@
         };
         return new Zombie1(i, startX, startY);
       },
+
       ...mapMutations({
         addZombie1: 'vueGame/addZombie1',
         zombie1Move: 'vueGame/zombie1Move',
         zombie1Del: 'vueGame/zombie1Del',
-        hitGridAddObject: 'vueGame/hitGridAddObject',
         hitHero: 'vueGame/hitHero',
       })
     },
@@ -168,6 +207,9 @@
         } else {
           this.isFight = false;
         }
+
+        // смотрим расстояние до героя и идем к нему если надо
+        this.goToTheHero();
 
       };
       requestAnimationFrame(animate);
