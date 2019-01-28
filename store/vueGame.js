@@ -42,7 +42,11 @@ export const mutations = {
     state.hero.position.x += delta.x;
   },
   hitHero(state,dmg){
-    state.hero.parameters.hp -= dmg;
+    if (state.hero.parameters.hp - dmg < 0){
+      state.hero.parameters.hp = 0;
+    } else {
+      state.hero.parameters.hp -= dmg;
+    }
   },
 
   yTranslationChange(state, delta) {
