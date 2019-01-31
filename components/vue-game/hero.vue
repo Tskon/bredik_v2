@@ -27,6 +27,7 @@
     data() {
       return {
         isWalk: false,
+        isDead: false,
         isShoot: false,
         direction: 'up',
         directionCodes: {
@@ -45,6 +46,18 @@
       },
       mapWidth() {
         return this.$store.state.vueGame.gameMap.size.width;
+      },
+      hp() {
+        return this.$store.state.vueGame.hero.parameters.hp;
+      }
+    },
+    watch: {
+      hp(){
+        if (this.hp === 0){
+          this.isDead = true;
+          this.isWalk = false;
+          this.isShoot = false;
+        }
       }
     },
     methods: {
@@ -76,8 +89,8 @@
       },
       collisionCallback(options = {}) {
         // в коллбэк должен прокидываться дамаг и прочие зависимости
-        console.log('hero callback!')
-        const dmg = options.dmg || 0;
+        // console.log('hero callback!')
+        // const dmg = options.dmg || 0;
       },
       move() {
         if (this.direction === 'left' || this.direction === 'right') {
