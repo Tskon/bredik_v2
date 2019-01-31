@@ -62,6 +62,7 @@
     },
     methods: {
       keyDownHandler(e) {
+        console.log(e.code)
         if (e.code === 'ArrowLeft' || e.code === 'ArrowUp' || e.code === 'ArrowRight' || e.code === 'ArrowDown') {
           e.preventDefault();
           this.isWalk = true;
@@ -79,6 +80,15 @@
             this.direction = 'down';
           }
 
+        }
+
+        if (e.code === 'Space') {
+          if (!this.isShoot){
+            this.isShoot = true;
+            setTimeout(()=>{
+              this.isShoot = false;
+            }, 500);
+          }
         }
       },
       keyUpHandler(e) {
