@@ -63,32 +63,33 @@
     },
     methods: {
       keyDownHandler(e) {
-        console.log(e.code)
-        if (e.code === 'ArrowLeft' || e.code === 'ArrowUp' || e.code === 'ArrowRight' || e.code === 'ArrowDown') {
-          e.preventDefault();
-          this.isWalk = true;
+        if(!this.isDead){
+          if (e.code === 'ArrowLeft' || e.code === 'ArrowUp' || e.code === 'ArrowRight' || e.code === 'ArrowDown') {
+            e.preventDefault();
+            this.isWalk = true;
 
-          if (e.code === 'ArrowLeft') {
-            this.direction = 'left';
-          }
-          if (e.code === 'ArrowUp') {
-            this.direction = 'up';
-          }
-          if (e.code === 'ArrowRight') {
-            this.direction = 'right';
-          }
-          if (e.code === 'ArrowDown') {
-            this.direction = 'down';
+            if (e.code === 'ArrowLeft') {
+              this.direction = 'left';
+            }
+            if (e.code === 'ArrowUp') {
+              this.direction = 'up';
+            }
+            if (e.code === 'ArrowRight') {
+              this.direction = 'right';
+            }
+            if (e.code === 'ArrowDown') {
+              this.direction = 'down';
+            }
+
           }
 
-        }
-
-        if (e.code === 'Space') {
-          if (!this.isShoot){
-            this.isShoot = true;
-            setTimeout(()=>{
-              this.isShoot = false;
-            }, 500);
+          if (e.code === 'Space') {
+            if (!this.isShoot){
+              this.isShoot = true;
+              setTimeout(()=>{
+                this.isShoot = false;
+              }, 500);
+            }
           }
         }
       },
