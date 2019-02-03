@@ -27,6 +27,7 @@
         isDead: false,
         isWalk: false,
         isFight: false,
+        isChangeDirectionBlocked: false,
         direction: 'down',
         zombie1Index: 0,
         cacheMove: { x: 0, y: 0 }, // для уменьшения количества запросов к стору
@@ -92,6 +93,19 @@
         setTimeout(() => {
           this.isFight = false;
         }, 3000);
+      },
+
+      checkChangeDirectionAvailable() {
+        if (this.isChangeDirectionBlocked) {
+          return false;
+        } else {
+          this.isChangeDirectionBlocked = true;
+          setTimeout(()=>{
+            this.isChangeDirectionBlocked = false;
+          }, 1000);
+
+          return true;
+        }
       },
 
       getObjectForCollision() {
@@ -202,15 +216,18 @@
         });
 
         if(this.collisions.length){
-          this.direction = this.collisions[0].collisionFrom;
+          if(this.checkChangeDirectionAvailable()) {
+            this.direction = this.collisions[ 0 ].collisionFrom;
+          }
           this.isFight = true;
         } else {
           this.isFight = false;
         }
 
         // смотрим расстояние до героя и идем к нему если надо
-        this.goToTheHero();
-
+        if(this.checkChangeDirectionAvailable()) {
+          this.goToTheHero();
+        }
       };
       requestAnimationFrame(animate);
     }
