@@ -96,6 +96,7 @@
       },
 
       checkChangeDirectionAvailable() {
+        // функция для задержки смены направлений у зомби, чтобы не меняли слишком быстро
         if (this.isChangeDirectionBlocked) {
           return false;
         } else {
