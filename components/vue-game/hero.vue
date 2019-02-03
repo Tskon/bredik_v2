@@ -5,6 +5,7 @@
        hero_stay: !isWalk,
        hero_walk: isWalk,
        hero_shoot: isShoot,
+       hero_dead: isDead,
        hero_up: direction === 'up',
        hero_right: direction === 'right',
        hero_down: direction === 'down',
@@ -58,7 +59,7 @@
           this.isWalk = false;
           this.isShoot = false;
         }
-      }
+      },
     },
     methods: {
       keyDownHandler(e) {
@@ -195,6 +196,14 @@
     background: url("/vue-game/sprites/hero_walk3.gif") no-repeat;
     background-position: center;
     background-size: 100%;
+  }
+
+  .hero_dead {
+    background: url("/vue-game/sprites/hero_death1.gif") no-repeat;
+    background-position: center;
+    background-size: 100%;
+    padding: 30px 90px 30px 40px;
+    margin: 0 -50px;
   }
 
   .hero_right {
