@@ -22,7 +22,7 @@
 <script>
   import { mapMutations } from 'vuex';
   import { getCollisionObject } from './js/helper';
-
+// реализовать стрельбу и регистрацию попаданий в зомби.
   export default {
     name: "hero",
     data() {
