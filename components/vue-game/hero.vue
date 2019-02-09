@@ -60,6 +60,11 @@
           this.isShoot = false;
         }
       },
+      isShoot(){
+        if(this.isShoot){
+          this.shoot();
+        }
+      }
     },
     methods: {
       keyDownHandler(e) {
@@ -117,6 +122,9 @@
             this.yTranslationChange(-this.hero.parameters.speed) :
             this.yTranslationChange(this.hero.parameters.speed);
         }
+      },
+      shoot(){
+
       },
       cachingMoveRequests() {
         setInterval(() => {
@@ -203,6 +211,16 @@
     background: url("/vue-game/sprites/hero_shoot1.gif") no-repeat;
     background-position: center;
     background-size: 200%;
+    &:after{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 300px;
+      transform-origin: top;
+      transform: rotate(90deg) translateX(15px);
+      background: url("/vue-game/sprites/bullet01 alpha.gif");
+      background-color: red;
+    }
   }
 
   .hero_dead {
