@@ -214,12 +214,11 @@
     &:after{
       content: '';
       display: block;
-      width: 10px;
-      height: 300px;
-      transform-origin: top;
-      transform: rotate(90deg) translateX(15px);
-      background: url("/vue-game/sprites/bullet01 alpha.gif");
-      background-color: red;
+      width: 300px;
+      height: 10px;
+      transform-origin: left;
+      transform: rotate(180deg) translate(10px, -5px);
+      background: url("/vue-game/sprites/bullet01_alpha.gif") repeat-x ;
     }
   }
 
