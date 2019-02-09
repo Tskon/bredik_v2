@@ -88,7 +88,7 @@
               this.isShoot = true;
               setTimeout(()=>{
                 this.isShoot = false;
-              }, 500);
+              }, 600);
             }
           }
         }
@@ -197,6 +197,12 @@
     background: url("/vue-game/sprites/hero_walk3.gif") no-repeat;
     background-position: center;
     background-size: 100%;
+  }
+
+  .hero_shoot {
+    background: url("/vue-game/sprites/hero_shoot1.gif") no-repeat;
+    background-position: center;
+    background-size: 200%;
   }
 
   .hero_dead {
