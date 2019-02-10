@@ -29,7 +29,8 @@ export const state = () => ({
       hp: 100,
       armor: 50,
       speed: 5,
-    }
+    },
+    bullets: []
   },
 
   zombie1List: [],
@@ -60,7 +61,8 @@ export const mutations = {
     }
   },
   heroShoot(state, data){
-
+    console.log('shoot', data.x, data.y, data.direction)
+    state.hero.bullets.push(data);
   },
 
   ///////////////////////////

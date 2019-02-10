@@ -124,7 +124,11 @@
         }
       },
       shoot(){
-
+        this.heroShoot({
+          x:this.hero.position.x,
+          y:this.hero.position.y - this.$store.state.vueGame.gameMap.yTranslation,
+          direction: this.direction
+        });
       },
       cachingMoveRequests() {
         setInterval(() => {
@@ -148,6 +152,7 @@
       ...mapMutations({
         heroMove: 'vueGame/heroMove',
         yTranslationChange: 'vueGame/yTranslationChange',
+        heroShoot: 'vueGame/heroShoot'
       })
     },
     mounted() {
