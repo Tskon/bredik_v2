@@ -38,6 +38,17 @@ export const state = () => ({
 });
 
 export const mutations = {
+  ///////////////////////////
+  // Basic                 //
+  ///////////////////////////
+  yTranslationChange(state, delta) {
+    state.gameMap.yTranslation -= delta;
+  },
+
+
+  ///////////////////////////
+  // Hero                  //
+  ///////////////////////////
   heroMove(state, delta) {
     state.hero.position.x += delta.x;
   },
@@ -48,11 +59,13 @@ export const mutations = {
       state.hero.parameters.hp -= dmg;
     }
   },
+  heroShoot(state, data){
 
-  yTranslationChange(state, delta) {
-    state.gameMap.yTranslation -= delta;
   },
 
+  ///////////////////////////
+  // Zombie1               //
+  ///////////////////////////
   addZombie1(state, zombie) {
     state.zombie1List.push(zombie);
   },
