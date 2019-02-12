@@ -216,15 +216,7 @@
     background: url("/vue-game/sprites/hero_shoot1.gif") no-repeat;
     background-position: center;
     background-size: 200%;
-    &:after{
-      content: '';
-      display: block;
-      width: 300px;
-      height: 10px;
-      transform-origin: left;
-      transform: rotate(180deg) translate(10px, -5px);
-      background: url("/vue-game/sprites/bullet01_alpha.gif") repeat-x ;
-    }
+
   }
 
   .hero_dead {

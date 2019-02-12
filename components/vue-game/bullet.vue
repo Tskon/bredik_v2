@@ -37,8 +37,8 @@
 <style lang="scss" scoped>
   .bullet{
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: red;
+    width: 3px;
+    height: 15px;
+    background: linear-gradient(white, orange);
   }
 </style>
